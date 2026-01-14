@@ -76,7 +76,14 @@ const App = () => {
 
   const handleStart = async () => {
     setScreen('translating');
-    await session.startSession(settings.project.slug, settings.locale, settings.stringsPerSession);
+    await session.startSession({
+      projectSlug: settings.project.slug,
+      projectName: settings.project.name,
+      localeSlug: settings.locale,
+      sampleSize: settings.stringsPerSession,
+      userId: user?.hash || user?.profile_url?.split('/').pop() || 'anonymous',
+      userEmail: user?.email || null,
+    });
   };
 
   const handleSubmit = () => {

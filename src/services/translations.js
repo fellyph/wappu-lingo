@@ -3,7 +3,9 @@
  * Handles persisting and retrieving user translations from D1 database
  */
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:8788' : '';
+// In dev mode with wrangler pages dev, use port 8788
+// In production on Cloudflare Pages, use relative path
+const API_BASE = import.meta.env.DEV ? '' : '';
 
 /**
  * Submit a translation to the database
