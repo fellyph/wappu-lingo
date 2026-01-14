@@ -1,6 +1,14 @@
 import { Globe, Package, Hash } from 'lucide-react';
+import type { UseSettingsReturn } from '../types';
 
-const SettingsScreen = ({
+interface SettingsScreenProps {
+  settings: UseSettingsReturn;
+  onLocaleChange: (locale: string) => void;
+  onProjectChange: (projectId: string) => void;
+  onStringsPerSessionChange: (count: number) => void;
+}
+
+const SettingsScreen: React.FC<SettingsScreenProps> = ({
   settings,
   onLocaleChange,
   onProjectChange,

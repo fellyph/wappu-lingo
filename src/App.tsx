@@ -13,16 +13,24 @@ import {
 import { useSettings } from './hooks/useSettings';
 import { useTranslationSession } from './hooks/useTranslationSession';
 import SettingsScreen from './components/SettingsScreen';
+import type { GravatarProfile, TranslationString, Locale, Project, SessionStats } from './types';
 
 const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1'; // Placeholder
 const REDIRECT_URI = window.location.origin + '/';
 
-const App = () => {
-  const [screen, setScreen] = useState('dashboard');
-  const [stats, setStats] = useState({ translated: 256, approved: 180 });
+type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings';
+
+interface Stats {
+  translated: number;
+  approved: number;
+}
+
+const App: React.FC = () => {
+  const [screen, setScreen] = useState<ScreenType>('dashboard');
+  const [stats, setStats] = useState<Stats>({ translated: 256, approved: 180 });
   const [translationValue, setTranslationValue] = useState('');
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('gravatar_token'));
+  const [user, setUser] = useState<GravatarProfile | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem('gravatar_token'));
   const [isLoading, setIsLoading] = useState(false);
 
   // Use new hooks
@@ -37,7 +45,7 @@ const App = () => {
       if (accessToken) {
         setToken(accessToken);
         localStorage.setItem('gravatar_token', accessToken);
-        window.history.replaceState(null, null, window.location.pathname);
+        window.history.replaceState(null, '', window.location.pathname);
       }
     }
   }, []);
@@ -48,7 +56,7 @@ const App = () => {
       fetch('https://api.gravatar.com/v3/me/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
-        .then((res) => res.json())
+        .then((res) => res.json() as Promise<GravatarProfile>)
         .then((data) => {
           if (data.error) {
             localStorage.removeItem('gravatar_token');
@@ -186,7 +194,21 @@ const App = () => {
 
 /* --- Sub-Components --- */
 
-const Dashboard = ({ stats, onStart, user, onLogout, isSessionLoading }) => (
+interface DashboardProps {
+  stats: Stats;
+  onStart: () => Promise<void>;
+  user: GravatarProfile | null;
+  onLogout: () => void;
+  isSessionLoading: boolean;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({
+  stats,
+  onStart,
+  user,
+  onLogout,
+  isSessionLoading,
+}) => (
   <div className="screen animate-fade-in">
     <header className="header-navy">
       <div className="header-top">
@@ -231,7 +253,11 @@ const Dashboard = ({ stats, onStart, user, onLogout, isSessionLoading }) => (
   </div>
 );
 
-const LoginScreen = ({ onLogin }) => (
+interface LoginScreenProps {
+  onLogin: () => void;
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => (
   <div className="login-container animate-fade-in">
     <div className="login-card">
       <div className="login-mascot">
@@ -252,7 +278,21 @@ const LoginScreen = ({ onLogin }) => (
   </div>
 );
 
-const TranslationScreen = ({
+interface TranslationScreenProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  onSkip: () => void;
+  currentString: TranslationString | null;
+  progressPercent: number;
+  locale: Locale;
+  project: Project;
+  isLoading: boolean;
+  error: string | null;
+  onBack: () => void;
+}
+
+const TranslationScreen: React.FC<TranslationScreenProps> = ({
   value,
   onChange,
   onSubmit,
@@ -357,7 +397,12 @@ const TranslationScreen = ({
   );
 };
 
-const SummaryScreen = ({ onDone, sessionStats }) => (
+interface SummaryScreenProps {
+  onDone: () => void;
+  sessionStats: SessionStats;
+}
+
+const SummaryScreen: React.FC<SummaryScreenProps> = ({ onDone, sessionStats }) => (
   <div
     className="screen animate-fade-in"
     style={{ background: 'var(--color-navy)', minHeight: '100%', padding: '24px' }}

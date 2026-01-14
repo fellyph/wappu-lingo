@@ -1,4 +1,6 @@
-export const LOCALES = [
+import type { Locale } from '../types';
+
+export const LOCALES: Locale[] = [
   { code: 'pt-br', name: 'Portuguese (Brazil)', wpLocale: 'pt_BR' },
   { code: 'es', name: 'Spanish', wpLocale: 'es_ES' },
   { code: 'fr', name: 'French', wpLocale: 'fr_FR' },

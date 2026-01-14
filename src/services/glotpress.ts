@@ -1,3 +1,5 @@
+import type { GlotPressProject, RawGlotPressString, TranslationString } from '../types';
+
 const GLOTPRESS_BASE = 'https://translate.wordpress.org/api/projects';
 
 // Use CORS proxy for development (browser requests)
@@ -8,7 +10,7 @@ const USE_CORS_PROXY = true; // Set to false if using backend proxy
 /**
  * Build URL with optional CORS proxy
  */
-function buildUrl(path) {
+function buildUrl(path: string): string {
   const fullUrl = `${GLOTPRESS_BASE}${path}`;
   return USE_CORS_PROXY ? `${CORS_PROXY}${encodeURIComponent(fullUrl)}` : fullUrl;
 }
@@ -16,7 +18,7 @@ function buildUrl(path) {
 /**
  * Fisher-Yates shuffle for random sampling
  */
-function shuffleArray(array) {
+function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -27,9 +29,9 @@ function shuffleArray(array) {
 
 /**
  * Fetch project information including translation sets
- * @param {string} projectSlug - e.g., 'wp/dev' or 'wp-plugins/woocommerce/dev'
+ * @param projectSlug - e.g., 'wp/dev' or 'wp-plugins/woocommerce/dev'
  */
-export async function fetchProjectStats(projectSlug) {
+export async function fetchProjectStats(projectSlug: string): Promise<GlotPressProject> {
   const url = buildUrl(`/${projectSlug}/`);
   const response = await fetch(url);
 
@@ -42,10 +44,11 @@ export async function fetchProjectStats(projectSlug) {
 
 /**
  * Get untranslated count for a specific locale
- * @param {string} projectSlug
- * @param {string} localeSlug - e.g., 'pt-br'
  */
-export async function getUntranslatedCount(projectSlug, localeSlug) {
+export async function getUntranslatedCount(
+  projectSlug: string,
+  localeSlug: string
+): Promise<number> {
   const stats = await fetchProjectStats(projectSlug);
 
   const translationSet = stats.translation_sets?.find(
@@ -57,10 +60,11 @@ export async function getUntranslatedCount(projectSlug, localeSlug) {
 
 /**
  * Fetch untranslated strings for a project/locale
- * @param {string} projectSlug
- * @param {string} localeSlug
  */
-export async function fetchUntranslatedStrings(projectSlug, localeSlug) {
+export async function fetchUntranslatedStrings(
+  projectSlug: string,
+  localeSlug: string
+): Promise<RawGlotPressString[]> {
   const url = buildUrl(`/${projectSlug}/${localeSlug}/default/?filters[status]=untranslated`);
   const response = await fetch(url);
 
@@ -68,20 +72,20 @@ export async function fetchUntranslatedStrings(projectSlug, localeSlug) {
     throw new Error(`Failed to fetch strings: ${response.status}`);
   }
 
-  return response.json();
+  const data = (await response.json()) as RawGlotPressString[] | { rows?: RawGlotPressString[] };
+  // Handle case where API returns object with rows property or direct array
+  return Array.isArray(data) ? data : data.rows || [];
 }
 
 /**
  * Fetch and randomly sample N strings for a translation session
- * @param {string} projectSlug
- * @param {string} localeSlug
- * @param {number} sampleSize - Number of strings to return
  */
-export async function fetchSessionStrings(projectSlug, localeSlug, sampleSize = 10) {
-  const allStrings = await fetchUntranslatedStrings(projectSlug, localeSlug);
-
-  // Handle case where API returns object with rows property or direct array
-  const stringsArray = Array.isArray(allStrings) ? allStrings : allStrings.rows || [];
+export async function fetchSessionStrings(
+  projectSlug: string,
+  localeSlug: string,
+  sampleSize: number = 10
+): Promise<RawGlotPressString[]> {
+  const stringsArray = await fetchUntranslatedStrings(projectSlug, localeSlug);
 
   if (stringsArray.length === 0) {
     return [];
@@ -95,7 +99,7 @@ export async function fetchSessionStrings(projectSlug, localeSlug, sampleSize = 
 /**
  * Normalize a string object from GlotPress API
  */
-export function normalizeString(rawString) {
+export function normalizeString(rawString: RawGlotPressString): TranslationString {
   return {
     id: rawString.original_id,
     singular: rawString.singular,

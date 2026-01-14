@@ -1,20 +1,27 @@
 import { useState, useCallback, useRef } from 'react';
 import { fetchSessionStrings, normalizeString } from '../services/glotpress';
 import { submitTranslation as persistTranslation } from '../services/translations';
+import type {
+  TranslationString,
+  SessionStats,
+  SessionContext,
+  StartSessionOptions,
+  UseTranslationSessionReturn,
+} from '../types';
 
-export function useTranslationSession() {
-  const [strings, setStrings] = useState([]);
+export function useTranslationSession(): UseTranslationSessionReturn {
+  const [strings, setStrings] = useState<TranslationString[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [sessionStats, setSessionStats] = useState({
+  const [error, setError] = useState<string | null>(null);
+  const [sessionStats, setSessionStats] = useState<SessionStats>({
     total: 0,
     completed: 0,
     skipped: 0,
   });
 
   // Store session context for API calls
-  const sessionContext = useRef({
+  const sessionContext = useRef<SessionContext>({
     projectSlug: null,
     projectName: null,
     locale: null,
@@ -24,15 +31,8 @@ export function useTranslationSession() {
 
   /**
    * Start a new translation session
-   * @param {Object} options - Session options
-   * @param {string} options.projectSlug - Project slug (e.g., 'wp/dev')
-   * @param {string} options.projectName - Project display name
-   * @param {string} options.localeSlug - Locale code (e.g., 'pt-br')
-   * @param {number} options.sampleSize - Number of strings to fetch
-   * @param {string} options.userId - User's unique ID
-   * @param {string} options.userEmail - User's email
    */
-  const startSession = useCallback(async (options) => {
+  const startSession = useCallback(async (options: StartSessionOptions) => {
     const { projectSlug, projectName, localeSlug, sampleSize, userId, userEmail } = options;
 
     // Store context for later API calls
@@ -55,7 +55,8 @@ export function useTranslationSession() {
       setStrings(normalized);
       setSessionStats((prev) => ({ ...prev, total: normalized.length }));
     } catch (err) {
-      setError(err.message || 'Failed to load strings');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load strings';
+      setError(errorMessage);
       setStrings([]);
     } finally {
       setIsLoading(false);
@@ -83,11 +84,11 @@ export function useTranslationSession() {
    * Persists the translation to the database
    */
   const submitTranslation = useCallback(
-    async (translation) => {
+    async (translation: string) => {
       const ctx = sessionContext.current;
 
       // Persist to database (fire and forget, don't block UI)
-      if (ctx.userId && currentString) {
+      if (ctx.userId && ctx.projectSlug && ctx.locale && currentString) {
         persistTranslation({
           user_id: ctx.userId,
           user_email: ctx.userEmail,

@@ -1,4 +1,6 @@
-export const PROJECTS = [
+import type { Project } from '../types';
+
+export const PROJECTS: Project[] = [
   {
     id: 'wp-core',
     name: 'WordPress Core',

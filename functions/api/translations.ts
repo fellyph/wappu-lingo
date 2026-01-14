@@ -4,20 +4,53 @@
  * POST /api/translations - Submit a new translation
  */
 
+interface Env {
+  DB: D1Database;
+}
+
+interface TranslationBody {
+  user_id: string;
+  user_email?: string | null;
+  project_slug: string;
+  project_name?: string | null;
+  locale: string;
+  original_id: string;
+  original_string: string;
+  translation: string;
+  context?: string | null;
+  status?: string;
+}
+
+interface TranslationRow {
+  id: number;
+  user_id: string;
+  user_email: string | null;
+  project_slug: string;
+  project_name: string | null;
+  locale: string;
+  original_id: string;
+  original_string: string;
+  translation: string;
+  context: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
 // CORS headers for all responses
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 // Handle OPTIONS preflight
-export async function onRequestOptions() {
+export async function onRequestOptions(): Promise<Response> {
   return new Response(null, { headers: corsHeaders });
 }
 
 // Handle GET requests - List translations
-export async function onRequestGet(context) {
+export async function onRequestGet(context: { request: Request; env: Env }): Promise<Response> {
   const { request, env } = context;
   const url = new URL(request.url);
 
@@ -25,15 +58,12 @@ export async function onRequestGet(context) {
   const userId = url.searchParams.get('user_id');
 
   if (!userId) {
-    return Response.json(
-      { error: 'user_id is required' },
-      { status: 400, headers: corsHeaders }
-    );
+    return Response.json({ error: 'user_id is required' }, { status: 400, headers: corsHeaders });
   }
 
   // Build query with optional filters
   let query = 'SELECT * FROM translations WHERE user_id = ?';
-  const params = [userId];
+  const params: (string | number)[] = [userId];
 
   // Filter by project
   const project = url.searchParams.get('project');
@@ -73,13 +103,15 @@ export async function onRequestGet(context) {
   query += ' ORDER BY created_at DESC';
 
   // Pagination
-  const limit = parseInt(url.searchParams.get('limit')) || 50;
-  const offset = parseInt(url.searchParams.get('offset')) || 0;
+  const limit = parseInt(url.searchParams.get('limit') || '50', 10);
+  const offset = parseInt(url.searchParams.get('offset') || '0', 10);
   query += ' LIMIT ? OFFSET ?';
   params.push(limit, offset);
 
   try {
-    const result = await env.DB.prepare(query).bind(...params).all();
+    const result = await env.DB.prepare(query)
+      .bind(...params)
+      .all<TranslationRow>();
 
     return Response.json(
       {
@@ -102,21 +134,18 @@ export async function onRequestGet(context) {
 }
 
 // Handle POST requests - Create translation
-export async function onRequestPost(context) {
+export async function onRequestPost(context: { request: Request; env: Env }): Promise<Response> {
   const { request, env } = context;
 
-  let body;
+  let body: TranslationBody;
   try {
     body = await request.json();
   } catch {
-    return Response.json(
-      { error: 'Invalid JSON body' },
-      { status: 400, headers: corsHeaders }
-    );
+    return Response.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders });
   }
 
   // Validate required fields
-  const required = [
+  const required: (keyof TranslationBody)[] = [
     'user_id',
     'project_slug',
     'locale',
