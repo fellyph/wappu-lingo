@@ -2,7 +2,7 @@
 
 A gamified WordPress translation learning app that helps contributors practice translating WordPress Core and popular plugins.
 
-![Wappu Lingo](src/imgs/original_wapuu.png)
+![Wappu Lingo](public/wapuu.png)
 
 ## Features
 
