@@ -15,6 +15,7 @@ import { useTranslationSession } from './hooks/useTranslationSession';
 import { fetchUserStats } from './services/translations';
 import SettingsScreen from './components/SettingsScreen';
 import type { GravatarProfile, TranslationString, Locale, Project, SessionStats } from './types';
+import wapuuImage from './imgs/original_wapuu.png';
 
 const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1'; // Placeholder
 const REDIRECT_URI = window.location.origin + '/';
@@ -235,7 +236,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         <h1>WordPress Translator</h1>
         <div className="user-avatar" onClick={onLogout} title="Click to Logout">
           <img
-            src={user?.avatar_url || '/src/imgs/original_wapuu.png'}
+            src={user?.avatar_url || wapuuImage}
             alt={user?.display_name || 'User'}
           />
         </div>
@@ -248,7 +249,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         </div>
         <div className="stat-item">
           <div className="icon-wp-small">
-            <img src="/src/imgs/original_wapuu.png" alt="WP" />
+            <img src={wapuuImage} alt="WP" />
           </div>
           <div className="stat-stack">
             <span className="stat-label">Approved:</span>
@@ -267,7 +268,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       </button>
 
       <div className="mascot-container animate-bounce">
-        <img src="/src/imgs/original_wapuu.png" alt="Happy Wapuu" />
+        <img src={wapuuImage} alt="Happy Wapuu" />
       </div>
     </div>
   </div>
@@ -281,7 +282,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => (
   <div className="login-container animate-fade-in">
     <div className="login-card">
       <div className="login-mascot">
-        <img src="/src/imgs/original_wapuu.png" alt="Wapuu" />
+        <img src={wapuuImage} alt="Wapuu" />
       </div>
       <h1>Wappu Lingo</h1>
       <p>
@@ -352,7 +353,7 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
     return (
       <div className="screen animate-fade-in empty-container">
         <div className="mascot-container">
-          <img src="/src/imgs/original_wapuu.png" alt="Wapuu" />
+          <img src={wapuuImage} alt="Wapuu" />
         </div>
         <p className="empty-message">No untranslated strings found for {locale.name}.</p>
         <p className="empty-submessage">
@@ -409,7 +410,7 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
           </div>
 
           <div className="mascot-peek">
-            <img src="/src/imgs/original_wapuu.png" alt="Wapuu peaking" />
+            <img src={wapuuImage} alt="Wapuu peaking" />
           </div>
         </div>
       </div>
