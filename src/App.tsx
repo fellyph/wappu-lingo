@@ -15,13 +15,15 @@ import { useSettings } from './hooks/useSettings';
 import { useTranslationSession } from './hooks/useTranslationSession';
 import { fetchUserStats } from './services/translations';
 import SettingsScreen from './components/SettingsScreen';
+import ActivityScreen from './components/ActivityScreen';
 import type { GravatarProfile, TranslationString, Locale, Project, SessionStats } from './types';
 import wapuuImage from './imgs/original_wapuu.png';
+import searchWapuuImage from './imgs/search-wappu.png';
 
 const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1'; // Placeholder
 const REDIRECT_URI = window.location.origin + '/';
 
-type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings';
+type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings' | 'activity';
 
 interface Stats {
   translated: number;
@@ -190,6 +192,11 @@ const App: React.FC = () => {
             onStringsPerSessionChange={settings.setStringsPerSession}
           />
         )}
+        {screen === 'activity' && (
+          <ActivityScreen
+            userId={user?.hash || user?.profile_url?.split('/').pop() || null}
+          />
+        )}
       </main>
 
       <nav className="bottom-nav">
@@ -199,7 +206,10 @@ const App: React.FC = () => {
         >
           <Home size={24} />
         </button>
-        <button>
+        <button
+          className={screen === 'activity' ? 'active' : ''}
+          onClick={() => setScreen('activity')}
+        >
           <Users size={24} />
         </button>
         <button>
@@ -367,18 +377,18 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
     );
   }
 
-  // No strings available - celebrate completion!
+  // No strings available - show search state
   if (!currentString) {
     return (
       <div className="screen animate-fade-in empty-state-screen">
         <div className="empty-state-card">
-          <div className="empty-state-mascot animate-bounce">
-            <img src={wapuuImage} alt={t('alt.wapuu_happy')} />
+          <div className="empty-state-mascot">
+            <img src={searchWapuuImage} alt={t('alt.wapuu_search')} />
           </div>
           <div className="empty-state-content">
-            <div className="empty-state-badge">
+            <div className="empty-state-badge empty-state-badge-search">
               <Check size={16} />
-              <span>{t('translation.all_done_badge', 'All caught up!')}</span>
+              <span>{t('translation.all_done_badge')}</span>
             </div>
             <h2 className="empty-state-title">
               {t('translation.no_strings', { locale: locale.name })}

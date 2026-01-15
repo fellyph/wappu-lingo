@@ -50,6 +50,7 @@
   },
   "settings": {
     "title": "الإعدادات",
+    "subtitle": "خصّص تجربة الترجمة الخاصة بك",
     "ui_language": "لغة التطبيق",
     "translation_language": "لغة الترجمة",
     "project": "المشروع",
@@ -61,6 +62,8 @@
     "wapuu_happy": "وابو سعيد",
     "wapuu": "وابو",
     "wapuu_peek": "وابو يختلس النظر",
+    "wapuu_search": "وابو يبحث",
+    "wapuu_settings": "وابو مع الإعدادات",
     "user": "مستخدم"
   },
   "activity": {
@@ -71,6 +74,13 @@
     "empty_message": "ابدأ الترجمة لرؤية مساهماتك هنا!",
     "original": "الأصلي",
     "translation": "الترجمة",
+    "weekly_summary": "ملخص الأسبوع",
+    "strings_approved_week": "النصوص المعتمدة هذا الأسبوع:",
+    "approved": "معتمدة",
+    "great_job_message": "عمل رائع! المزيد من الاعتمادات في الطريق.",
+    "keep_going_message": "استمر في الترجمة للحصول على اعتمادات!",
+    "view_all_translations": "عرض جميع الترجمات",
+    "back_to_summary": "العودة للملخص",
     "status": {
       "pending": "قيد الانتظار",
       "submitted": "مُرسلة",

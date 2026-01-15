@@ -654,21 +654,88 @@ input {
 }
 
 /* Settings Screen */
+.settings-screen {
+  min-height: 100%;
+}
+
+.settings-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  min-height: 80px;
+  overflow: visible;
+}
+
+.settings-header-content {
+  flex: 1;
+  padding-right: 100px;
+}
+
+.settings-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.settings-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.settings-wapuu {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-30%);
+  width: 120px;
+  z-index: 10;
+}
+
+.settings-wapuu img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
 .settings-content {
   padding: 24px;
+}
+
+.settings-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
 }
 
 .settings-section {
   margin-bottom: 24px;
 }
 
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
 .settings-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
   margin-bottom: 8px;
   color: var(--color-text);
+}
+
+.settings-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--color-green);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
 }
 
 .settings-select {
@@ -685,6 +752,11 @@ input {
 .settings-select:focus {
   border-color: var(--color-green-light);
   outline: none;
+}
+
+.settings-select:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
 }
 
 /* Button Row */
@@ -792,6 +864,11 @@ input {
   padding: 6px 14px;
   border-radius: var(--radius-full);
   margin-bottom: 16px;
+}
+
+.empty-state-badge-search {
+  background: var(--color-yellow);
+  color: var(--color-navy);
 }
 
 .empty-state-title {
@@ -1594,4 +1671,191 @@ button:disabled:active {
 [dir='rtl'] .activity-item-footer,
 [dir='rtl'] .activity-project {
   flex-direction: row-reverse;
+}
+
+/* ========================================
+   WEEKLY SUMMARY CARD
+   ======================================== */
+
+.weekly-summary-screen {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px 16px;
+  background: var(--color-green);
+}
+
+.weekly-summary-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.weekly-summary-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-white);
+  margin-bottom: 20px;
+}
+
+.weekly-summary-stats-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.weekly-summary-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-bottom: 16px;
+}
+
+.weekly-summary-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.weekly-summary-wapuu-small {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.weekly-summary-wapuu-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.weekly-summary-approved {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.weekly-summary-approved-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.weekly-summary-approved-value {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-navy);
+  line-height: 1;
+}
+
+.weekly-summary-wapuu-happy {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.weekly-summary-wapuu-happy img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.weekly-summary-message {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  text-align: center;
+  margin: 0;
+}
+
+.weekly-summary-btn {
+  width: 100%;
+  background: var(--color-white);
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.weekly-summary-btn:hover {
+  background: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Activity back button */
+.activity-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  color: var(--color-navy);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 0;
+  margin-bottom: 16px;
+}
+
+.activity-back-btn:hover {
+  color: var(--color-green);
+}
+
+.activity-back-icon {
+  transform: rotate(180deg);
+}
+
+/* Desktop responsive for weekly summary */
+@media (min-width: 768px) {
+  .weekly-summary-screen {
+    padding: 48px 24px;
+    align-items: center;
+  }
+
+  .weekly-summary-card {
+    max-width: 480px;
+  }
+
+  .weekly-summary-title {
+    font-size: 2rem;
+  }
+
+  .weekly-summary-stats-card {
+    padding: 32px;
+  }
+
+  .weekly-summary-approved-value {
+    font-size: 4rem;
+  }
+
+  .weekly-summary-wapuu-small {
+    width: 64px;
+    height: 64px;
+  }
+
+  .weekly-summary-wapuu-happy {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* RTL support for weekly summary */
+[dir='rtl'] .weekly-summary-btn {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .activity-back-btn {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .activity-back-icon {
+  transform: rotate(0deg);
 }
