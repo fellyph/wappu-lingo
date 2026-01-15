@@ -7,7 +7,7 @@ import { mockAuthenticatedUser } from './helpers/auth';
 async function waitForTranslationScreen(page: Page) {
   // Wait for either translation screen, loading, or empty state
   await expect(
-    page.locator('.string-display, .loading-container, .empty-container, .error-container')
+    page.locator('.string-display, .loading-container, .empty-state-screen, .error-container')
   ).toBeVisible({ timeout: 15000 });
 }
 
@@ -24,7 +24,7 @@ test.describe('Translation Session', () => {
 
     // Should show some translation-related content
     const hasContent = await page
-      .locator('.string-display, .loading-container, .empty-container')
+      .locator('.string-display, .loading-container, .empty-state-screen')
       .isVisible();
     expect(hasContent).toBe(true);
   });
@@ -57,7 +57,8 @@ test.describe('Translation Session', () => {
 
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
-      const input = page.locator('input[placeholder="Translate here..."]');
+      // Use input-group input as placeholder text may be translated
+      const input = page.locator('.input-group input');
       await input.fill('Test translation');
 
       const submitButton = page.locator('.btn-success');
@@ -71,7 +72,8 @@ test.describe('Translation Session', () => {
 
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
-      const input = page.locator('input[placeholder="Translate here..."]');
+      // Use input-group input as placeholder text may be translated
+      const input = page.locator('.input-group input');
       await input.fill('Test translation');
       await page.locator('.btn-success').click();
 
@@ -90,7 +92,7 @@ test.describe('Translation Session', () => {
 
       // Should still be on translation screen or summary
       await expect(
-        page.locator('.string-display, .summary-card, .empty-container')
+        page.locator('.string-display, .summary-card, .empty-state-screen')
       ).toBeVisible();
     }
   });
@@ -101,7 +103,8 @@ test.describe('Translation Session', () => {
 
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
-      await expect(page.locator('.source')).toContainText('Source:');
+      // Source element should be visible (text may be translated)
+      await expect(page.locator('.source')).toBeVisible();
     }
   });
 
@@ -122,7 +125,8 @@ test.describe('Translation Session', () => {
 
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
-      await expect(page.locator('h2')).toContainText('Translate to:');
+      // Header should be visible in header-minimal (text may be translated)
+      await expect(page.locator('.header-minimal h2')).toBeVisible();
     }
   });
 });
