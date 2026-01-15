@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useSettings } from './hooks/useSettings';
 import { useTranslationSession } from './hooks/useTranslationSession';
+import { fetchUserStats } from './services/translations';
 import SettingsScreen from './components/SettingsScreen';
 import type { GravatarProfile, TranslationString, Locale, Project, SessionStats } from './types';
 
@@ -27,7 +28,7 @@ interface Stats {
 
 const App: React.FC = () => {
   const [screen, setScreen] = useState<ScreenType>('dashboard');
-  const [stats, setStats] = useState<Stats>({ translated: 256, approved: 180 });
+  const [stats, setStats] = useState<Stats>({ translated: 0, approved: 0 });
   const [translationValue, setTranslationValue] = useState('');
   const [user, setUser] = useState<GravatarProfile | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('gravatar_token'));
@@ -36,6 +37,25 @@ const App: React.FC = () => {
   // Use new hooks
   const settings = useSettings();
   const session = useTranslationSession();
+
+  // Fetch user stats from the database when user is loaded
+  useEffect(() => {
+    if (user) {
+      const userId = user.hash || user.profile_url?.split('/').pop() || '';
+      if (userId) {
+        fetchUserStats(userId)
+          .then((userStats) => {
+            setStats({
+              translated: userStats.total,
+              approved: userStats.byStatus['approved'] || 0,
+            });
+          })
+          .catch(() => {
+            // Keep default stats on error
+          });
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     const hash = window.location.hash;
