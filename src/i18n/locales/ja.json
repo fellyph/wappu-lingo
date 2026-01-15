@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Wapuuを読み込み中..."
+  },
+  "login": {
+    "tagline": "WordPressの翻訳をゲーム化して、コミュニティに参加しましょう。Gravatarアカウントでログインして始めましょう。",
+    "button": "Gravatarでログイン",
+    "footer": "WordPress.com OAuthで動作"
+  },
+  "dashboard": {
+    "title": "WordPress翻訳者",
+    "logout_tooltip": "クリックしてログアウト",
+    "stats": {
+      "translated": "翻訳済み：",
+      "approved": "承認済み："
+    },
+    "welcome": "おかえりなさい、<strong>{{name}}</strong>さん！",
+    "start_button": "翻訳を始める！",
+    "loading_button": "読み込み中..."
+  },
+  "translation": {
+    "translate_to": "翻訳先: {{locale}}",
+    "loading": "文字列を読み込み中...",
+    "original_string": "原文：",
+    "priority": {
+      "high": "優先",
+      "normal": "通常"
+    },
+    "context": "コンテキスト: {{context}}",
+    "source": "ソース: {{project}}",
+    "your_translation": "あなたの翻訳：",
+    "placeholder": "ここに翻訳...",
+    "skip": "スキップ",
+    "submit": "送信",
+    "go_back": "戻る",
+    "no_strings": "{{locale}}の未翻訳文字列が見つかりません。",
+    "no_strings_hint": "設定で別のプロジェクトや言語を選択してみてください。"
+  },
+  "summary": {
+    "title": "セッション概要",
+    "this_session": "このセッション：",
+    "translated": "翻訳済み",
+    "skipped": "スキップ",
+    "total": "合計",
+    "success_message": "素晴らしい！あなたの翻訳は世界中のWordPressユーザーの役に立ちます。",
+    "empty_message": "大丈夫！いつでも戻ってきて貢献してください。",
+    "back_button": "ダッシュボードに戻る"
+  },
+  "settings": {
+    "title": "設定",
+    "ui_language": "アプリの言語",
+    "translation_language": "翻訳言語",
+    "project": "プロジェクト",
+    "strings_per_session": "セッションあたりの文字列数",
+    "strings_count": "{{count}}文字列"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "幸せなWapuu",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "のぞくWapuu",
+    "user": "ユーザー"
+  }
+}

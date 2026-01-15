@@ -1,10 +1,13 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { storage } from '../services/storage';
 import { PROJECTS } from '../constants/projects';
 import { LOCALES } from '../constants/locales';
+import { UI_LANGUAGES, getLanguageDir } from '../i18n';
 import type { UseSettingsReturn } from '../types';
 
 export function useSettings(): UseSettingsReturn {
+  const { i18n } = useTranslation();
   const [locale, setLocaleState] = useState(() => storage.getLocale());
   const [projectId, setProjectIdState] = useState(() => storage.getProject());
   const [stringsPerSession, setStringsPerSessionState] = useState(() =>
@@ -26,6 +29,17 @@ export function useSettings(): UseSettingsReturn {
     setStringsPerSessionState(count);
   }, []);
 
+  const setUILanguage = useCallback(
+    (langCode: string) => {
+      i18n.changeLanguage(langCode);
+      storage.setUILanguage(langCode);
+      // Update document direction for RTL support
+      document.documentElement.dir = getLanguageDir(langCode);
+      document.documentElement.lang = langCode;
+    },
+    [i18n]
+  );
+
   // Derived: get full project object
   const project = PROJECTS.find((p) => p.id === projectId) || PROJECTS[0];
 
@@ -43,5 +57,8 @@ export function useSettings(): UseSettingsReturn {
     setStringsPerSession,
     availableProjects: PROJECTS,
     availableLocales: LOCALES,
+    uiLanguage: i18n.language,
+    setUILanguage,
+    availableUILanguages: UI_LANGUAGES,
   };
 }

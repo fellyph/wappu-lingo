@@ -172,6 +172,12 @@ export interface TranslationsResponse {
 // Hook Return Types
 // =============================================================================
 
+export interface UILanguage {
+  code: string;
+  name: string;
+  dir: 'ltr' | 'rtl';
+}
+
 export interface UseSettingsReturn {
   locale: string;
   localeObj: Locale;
@@ -183,6 +189,9 @@ export interface UseSettingsReturn {
   setStringsPerSession: (count: number) => void;
   availableProjects: Project[];
   availableLocales: Locale[];
+  uiLanguage: string;
+  setUILanguage: (langCode: string) => void;
+  availableUILanguages: readonly UILanguage[];
 }
 
 export interface UseTranslationSessionReturn {

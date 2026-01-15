@@ -1,4 +1,5 @@
-import { Globe, Package, Hash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Globe, Package, Hash, Languages } from 'lucide-react';
 import type { UseSettingsReturn } from '../types';
 
 interface SettingsScreenProps {
@@ -14,20 +15,49 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
   onProjectChange,
   onStringsPerSessionChange,
 }) => {
-  const { localeObj, project, stringsPerSession, availableLocales, availableProjects } = settings;
+  const { t } = useTranslation();
+  const {
+    localeObj,
+    project,
+    stringsPerSession,
+    availableLocales,
+    availableProjects,
+    uiLanguage,
+    setUILanguage,
+    availableUILanguages,
+  } = settings;
 
   return (
     <div className="screen animate-fade-in">
       <header className="header-navy">
-        <h1>Settings</h1>
+        <h1>{t('settings.title')}</h1>
       </header>
 
       <div className="settings-content">
-        {/* Locale Selection */}
+        {/* UI Language Selection */}
+        <div className="settings-section">
+          <label className="settings-label">
+            <Languages size={20} />
+            {t('settings.ui_language')}
+          </label>
+          <select
+            value={uiLanguage}
+            onChange={(e) => setUILanguage(e.target.value)}
+            className="settings-select"
+          >
+            {availableUILanguages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Translation Target Language Selection */}
         <div className="settings-section">
           <label className="settings-label">
             <Globe size={20} />
-            Translation Language
+            {t('settings.translation_language')}
           </label>
           <select
             value={localeObj.code}
@@ -46,7 +76,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
         <div className="settings-section">
           <label className="settings-label">
             <Package size={20} />
-            Project
+            {t('settings.project')}
           </label>
           <select
             value={project.id}
@@ -65,7 +95,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
         <div className="settings-section">
           <label className="settings-label">
             <Hash size={20} />
-            Strings per Session
+            {t('settings.strings_per_session')}
           </label>
           <select
             value={stringsPerSession}
@@ -74,7 +104,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
           >
             {[5, 10, 15, 20, 25, 30].map((num) => (
               <option key={num} value={num}>
-                {num} strings
+                {t('settings.strings_count', { count: num })}
               </option>
             ))}
           </select>

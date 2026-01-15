@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Caricamento Wapuu..."
+  },
+  "login": {
+    "tagline": "Gamifica le tue traduzioni WordPress e unisciti alla comunità. Accedi con il tuo account Gravatar per iniziare.",
+    "button": "Accedi con Gravatar",
+    "footer": "Sviluppato con WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "Traduttore WordPress",
+    "logout_tooltip": "Clicca per uscire",
+    "stats": {
+      "translated": "Tradotte:",
+      "approved": "Approvate:"
+    },
+    "welcome": "Bentornato, <strong>{{name}}</strong>!",
+    "start_button": "Inizia a Tradurre!",
+    "loading_button": "Caricamento..."
+  },
+  "translation": {
+    "translate_to": "Traduci in: {{locale}}",
+    "loading": "Caricamento stringhe...",
+    "original_string": "Stringa Originale:",
+    "priority": {
+      "high": "Priorità",
+      "normal": "Normale"
+    },
+    "context": "Contesto: {{context}}",
+    "source": "Fonte: {{project}}",
+    "your_translation": "La Tua Traduzione:",
+    "placeholder": "Traduci qui...",
+    "skip": "Salta",
+    "submit": "Invia",
+    "go_back": "Torna Indietro",
+    "no_strings": "Nessuna stringa non tradotta trovata per {{locale}}.",
+    "no_strings_hint": "Prova a selezionare un progetto o una lingua diversa nelle Impostazioni."
+  },
+  "summary": {
+    "title": "Riepilogo Sessione",
+    "this_session": "Questa Sessione:",
+    "translated": "Tradotte",
+    "skipped": "Saltate",
+    "total": "Totale",
+    "success_message": "Ottimo lavoro! Le tue traduzioni aiuteranno gli utenti WordPress in tutto il mondo.",
+    "empty_message": "Nessun problema! Torna quando vuoi per contribuire.",
+    "back_button": "Torna alla Dashboard"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "ui_language": "Lingua App",
+    "translation_language": "Lingua di Traduzione",
+    "project": "Progetto",
+    "strings_per_session": "Stringhe per Sessione",
+    "strings_count": "{{count}} stringhe"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Wapuu felice",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu che sbircia",
+    "user": "Utente"
+  }
+}

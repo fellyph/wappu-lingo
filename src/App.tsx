@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import {
   Home,
   Users,
@@ -141,12 +142,14 @@ const App: React.FC = () => {
     setScreen('dashboard');
   };
 
+  const { t } = useTranslation();
+
   if (!token && !isLoading) {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
   if (isLoading) {
-    return <div className="loading-screen">Loading Wapuu...</div>;
+    return <div className="loading-screen">{t('app.loading')}</div>;
   }
 
   return (
@@ -229,75 +232,89 @@ const Dashboard: React.FC<DashboardProps> = ({
   user,
   onLogout,
   isSessionLoading,
-}) => (
-  <div className="screen animate-fade-in">
-    <header className="header-navy">
-      <div className="header-top">
-        <h1>WordPress Translator</h1>
-        <div className="user-avatar" onClick={onLogout} title="Click to Logout">
-          <img
-            src={user?.avatar_url || wapuuImage}
-            alt={user?.display_name || 'User'}
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="screen animate-fade-in">
+      <header className="header-navy">
+        <div className="header-top">
+          <h1>{t('dashboard.title')}</h1>
+          <div className="user-avatar" onClick={onLogout} title={t('dashboard.logout_tooltip')}>
+            <img
+              src={user?.avatar_url || wapuuImage}
+              alt={user?.display_name || t('alt.user')}
+            />
+          </div>
+        </div>
+
+        <div className="stats-card-container">
+          <div className="stat-card">
+            <div className="stat-card-icon translated">
+              <ShieldCheck size={24} />
+            </div>
+            <div className="stat-card-content">
+              <span className="stat-card-value">{stats.translated}</span>
+              <span className="stat-card-label">{t('dashboard.stats.translated')}</span>
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-card-icon approved">
+              <Check size={24} />
+            </div>
+            <div className="stat-card-content">
+              <span className="stat-card-value">{stats.approved}</span>
+              <span className="stat-card-label">{t('dashboard.stats.approved')}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="dashboard-content">
+        <div className="welcome-text">
+          <Trans
+            i18nKey="dashboard.welcome"
+            values={{ name: user?.display_name || 'Translator' }}
+            components={{ strong: <strong /> }}
           />
         </div>
-      </div>
+        <button className="btn-primary" onClick={onStart} disabled={isSessionLoading}>
+          {isSessionLoading ? t('dashboard.loading_button') : t('dashboard.start_button')}
+        </button>
 
-      <div className="stats-grid">
-        <div className="stat-item">
-          <span className="stat-label">Translated:</span>
-          <span className="stat-value">{stats.translated}</span>
+        <div className="mascot-container animate-bounce">
+          <img src={wapuuImage} alt={t('alt.wapuu_happy')} />
         </div>
-        <div className="stat-item">
-          <div className="icon-wp-small">
-            <img src={wapuuImage} alt="WP" />
-          </div>
-          <div className="stat-stack">
-            <span className="stat-label">Approved:</span>
-            <span className="stat-value">{stats.approved}</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div className="dashboard-content">
-      <div className="welcome-text">
-        Welcome back, <strong>{user?.display_name || 'Translator'}</strong>!
-      </div>
-      <button className="btn-primary" onClick={onStart} disabled={isSessionLoading}>
-        {isSessionLoading ? 'Loading...' : 'Start Translating!'}
-      </button>
-
-      <div className="mascot-container animate-bounce">
-        <img src={wapuuImage} alt="Happy Wapuu" />
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => (
-  <div className="login-container animate-fade-in">
-    <div className="login-card">
-      <div className="login-mascot">
-        <img src={wapuuImage} alt="Wapuu" />
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="login-container animate-fade-in">
+      <div className="login-card">
+        <div className="login-mascot">
+          <img src={wapuuImage} alt={t('alt.wapuu')} />
+        </div>
+        <h1>{t('app.name')}</h1>
+        <p>{t('login.tagline')}</p>
+
+        <button className="btn-login" onClick={onLogin}>
+          <LogIn size={20} style={{ marginRight: 10 }} /> {t('login.button')}
+        </button>
+
+        <div className="login-footer">{t('login.footer')}</div>
       </div>
-      <h1>Wappu Lingo</h1>
-      <p>
-        Gamify your WordPress translations and join the community. Login with your Gravatar account
-        to start.
-      </p>
-
-      <button className="btn-login" onClick={onLogin}>
-        <LogIn size={20} style={{ marginRight: 10 }} /> Login with Gravatar
-      </button>
-
-      <div className="login-footer">Powered by WordPress.com OAuth</div>
     </div>
-  </div>
-);
+  );
+};
 
 interface TranslationScreenProps {
   value: string;
@@ -326,12 +343,14 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
   error,
   onBack,
 }) => {
+  const { t } = useTranslation();
+
   // Loading state
   if (isLoading) {
     return (
       <div className="screen animate-fade-in loading-container">
         <Loader className="animate-spin" size={48} />
-        <p>Loading strings...</p>
+        <p>{t('translation.loading')}</p>
       </div>
     );
   }
@@ -342,26 +361,39 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
       <div className="screen animate-fade-in error-container">
         <p className="error-message">{error}</p>
         <button className="btn-outline" onClick={onBack}>
-          Go Back
+          {t('translation.go_back')}
         </button>
       </div>
     );
   }
 
-  // No strings available
+  // No strings available - celebrate completion!
   if (!currentString) {
     return (
-      <div className="screen animate-fade-in empty-container">
-        <div className="mascot-container">
-          <img src={wapuuImage} alt="Wapuu" />
+      <div className="screen animate-fade-in empty-state-screen">
+        <div className="empty-state-card">
+          <div className="empty-state-mascot animate-bounce">
+            <img src={wapuuImage} alt={t('alt.wapuu_happy')} />
+          </div>
+          <div className="empty-state-content">
+            <div className="empty-state-badge">
+              <Check size={16} />
+              <span>{t('translation.all_done_badge', 'All caught up!')}</span>
+            </div>
+            <h2 className="empty-state-title">
+              {t('translation.no_strings', { locale: locale.name })}
+            </h2>
+            <p className="empty-state-description">
+              {t('translation.no_strings_hint')}
+            </p>
+          </div>
+          <div className="empty-state-actions">
+            <button className="btn-primary-back" onClick={onBack}>
+              <Home size={20} />
+              {t('translation.go_back')}
+            </button>
+          </div>
         </div>
-        <p className="empty-message">No untranslated strings found for {locale.name}.</p>
-        <p className="empty-submessage">
-          Try selecting a different project or language in Settings.
-        </p>
-        <button className="btn-outline" onClick={onBack}>
-          Go Back
-        </button>
       </div>
     );
   }
@@ -369,7 +401,7 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
   return (
     <div className="screen animate-fade-in">
       <header className="header-minimal">
-        <h2>Translate to: {locale.name}</h2>
+        <h2>{t('translation.translate_to', { locale: locale.name })}</h2>
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
@@ -378,39 +410,48 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
       <div className="content">
         <div className="card">
           <div className="card-header">
-            <span className="card-label">Original String:</span>
+            <span className="card-label">{t('translation.original_string')}</span>
             <span className="badge">
-              {currentString.priority === 'high' ? 'Priority' : 'Normal'}
+              {currentString.priority === 'high'
+                ? t('translation.priority.high')
+                : t('translation.priority.normal')}
             </span>
           </div>
 
           <div className="string-display">{currentString.singular}</div>
 
-          {currentString.context && <p className="context">Context: {currentString.context}</p>}
+          {currentString.context && (
+            <p className="context">{t('translation.context', { context: currentString.context })}</p>
+          )}
 
           <p className="source">
-            Source: {project.name}
+            {t('translation.source', { project: project.name })}
             {currentString.references?.length > 0 && (
               <span className="reference"> ({currentString.references[0]})</span>
             )}
           </p>
 
           <div className="input-group">
-            <label>Your Translation:</label>
-            <input type="text" placeholder="Translate here..." value={value} onChange={onChange} />
+            <label>{t('translation.your_translation')}</label>
+            <input
+              type="text"
+              placeholder={t('translation.placeholder')}
+              value={value}
+              onChange={onChange}
+            />
           </div>
 
           <div className="button-row">
             <button className="btn-secondary" onClick={onSkip}>
-              Skip <SkipForward size={18} />
+              {t('translation.skip')} <SkipForward size={18} />
             </button>
             <button className="btn-success" onClick={onSubmit} disabled={!value.trim()}>
-              Submit <Check size={20} />
+              {t('translation.submit')} <Check size={20} />
             </button>
           </div>
 
           <div className="mascot-peek">
-            <img src={wapuuImage} alt="Wapuu peaking" />
+            <img src={wapuuImage} alt={t('alt.wapuu_peek')} />
           </div>
         </div>
       </div>
@@ -423,43 +464,47 @@ interface SummaryScreenProps {
   sessionStats: SessionStats;
 }
 
-const SummaryScreen: React.FC<SummaryScreenProps> = ({ onDone, sessionStats }) => (
-  <div
-    className="screen animate-fade-in"
-    style={{ background: 'var(--color-navy)', minHeight: '100%', padding: '24px' }}
-  >
-    <div className="summary-card">
-      <h2 className="summary-title">Session Summary</h2>
+const SummaryScreen: React.FC<SummaryScreenProps> = ({ onDone, sessionStats }) => {
+  const { t } = useTranslation();
 
-      <div className="weekly-stats-card">
-        <p className="stats-header">This Session:</p>
-        <div className="session-stats-grid">
-          <div className="session-stat">
-            <span className="session-stat-value">{sessionStats?.completed || 0}</span>
-            <span className="session-stat-label">Translated</span>
-          </div>
-          <div className="session-stat">
-            <span className="session-stat-value">{sessionStats?.skipped || 0}</span>
-            <span className="session-stat-label">Skipped</span>
-          </div>
-          <div className="session-stat">
-            <span className="session-stat-value">{sessionStats?.total || 0}</span>
-            <span className="session-stat-label">Total</span>
+  return (
+    <div
+      className="screen animate-fade-in"
+      style={{ background: 'var(--color-navy)', minHeight: '100%', padding: '24px' }}
+    >
+      <div className="summary-card">
+        <h2 className="summary-title">{t('summary.title')}</h2>
+
+        <div className="weekly-stats-card">
+          <p className="stats-header">{t('summary.this_session')}</p>
+          <div className="session-stats-grid">
+            <div className="session-stat">
+              <span className="session-stat-value">{sessionStats?.completed || 0}</span>
+              <span className="session-stat-label">{t('summary.translated')}</span>
+            </div>
+            <div className="session-stat">
+              <span className="session-stat-value">{sessionStats?.skipped || 0}</span>
+              <span className="session-stat-label">{t('summary.skipped')}</span>
+            </div>
+            <div className="session-stat">
+              <span className="session-stat-value">{sessionStats?.total || 0}</span>
+              <span className="session-stat-label">{t('summary.total')}</span>
+            </div>
           </div>
         </div>
+
+        <p className="message">
+          {sessionStats?.completed > 0
+            ? t('summary.success_message')
+            : t('summary.empty_message')}
+        </p>
+
+        <button className="btn-outline" onClick={onDone}>
+          {t('summary.back_button')} <ArrowRight size={20} style={{ marginLeft: 8 }} />
+        </button>
       </div>
-
-      <p className="message">
-        {sessionStats?.completed > 0
-          ? 'Great job! Your translations will help WordPress users worldwide.'
-          : 'No worries! Come back anytime to contribute.'}
-      </p>
-
-      <button className="btn-outline" onClick={onDone}>
-        Back to Dashboard <ArrowRight size={20} style={{ marginLeft: 8 }} />
-      </button>
     </div>
-  </div>
-);
+  );
+};
 
 export default App;
