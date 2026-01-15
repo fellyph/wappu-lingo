@@ -1,5 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { mockAuthenticatedUser } from './helpers/auth';
+import { mockAllAPIs } from './helpers/api';
 
 /**
  * Helper to wait for translation screen to be ready
