@@ -384,6 +384,12 @@ input {
 }
 
 /* Summary Screen */
+.summary-screen {
+  background: var(--color-navy);
+  min-height: 100%;
+  padding: 24px;
+}
+
 .screen-full {
   min-height: 100%;
   padding: 24px;
