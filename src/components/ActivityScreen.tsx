@@ -1,0 +1,151 @@
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Clock, FileText, Globe, Loader, ChevronRight } from 'lucide-react';
+import { fetchUserTranslations } from '../services/translations';
+import type { TranslationRecord } from '../types';
+
+interface ActivityScreenProps {
+  userId: string | null;
+}
+
+const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
+  const { t } = useTranslation();
+  const [translations, setTranslations] = useState<TranslationRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!userId) {
+      setIsLoading(false);
+      return;
+    }
+
+    const loadTranslations = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetchUserTranslations(userId, { limit: 50 });
+        setTranslations(response.translations);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load activity');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTranslations();
+  }, [userId]);
+
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return t('activity.time.just_now');
+    if (diffMins < 60) return t('activity.time.minutes_ago', { count: diffMins });
+    if (diffHours < 24) return t('activity.time.hours_ago', { count: diffHours });
+    if (diffDays < 7) return t('activity.time.days_ago', { count: diffDays });
+    
+    return date.toLocaleDateString();
+  };
+
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case 'approved': return 'status-approved';
+      case 'rejected': return 'status-rejected';
+      case 'submitted': return 'status-submitted';
+      default: return 'status-pending';
+    }
+  };
+
+  const truncateText = (text: string, maxLength: number = 60) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
+  if (isLoading) {
+    return (
+      <div className="screen animate-fade-in loading-container">
+        <Loader className="animate-spin" size={48} />
+        <p>{t('activity.loading')}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen animate-fade-in">
+      <header className="header-navy activity-header">
+        <div className="header-top">
+          <h1>{t('activity.title')}</h1>
+          <div className="activity-icon-badge">
+            <Clock size={24} />
+          </div>
+        </div>
+        <p className="activity-subtitle">{t('activity.subtitle')}</p>
+      </header>
+
+      <div className="activity-content">
+        {error && (
+          <div className="activity-error">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {!error && translations.length === 0 && (
+          <div className="activity-empty">
+            <FileText size={48} className="activity-empty-icon" />
+            <h3>{t('activity.empty_title')}</h3>
+            <p>{t('activity.empty_message')}</p>
+          </div>
+        )}
+
+        {!error && translations.length > 0 && (
+          <div className="activity-list">
+            {translations.map((item, index) => (
+              <div 
+                key={item.id || index} 
+                className="activity-item"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="activity-item-header">
+                  <div className="activity-project">
+                    <Globe size={14} />
+                    <span>{item.project_name || item.project_slug}</span>
+                  </div>
+                  <span className={`activity-status ${getStatusClass(item.status)}`}>
+                    {t(`activity.status.${item.status}`)}
+                  </span>
+                </div>
+                
+                <div className="activity-item-body">
+                  <div className="activity-original">
+                    <span className="activity-label">{t('activity.original')}:</span>
+                    <span className="activity-text">{truncateText(item.original_string)}</span>
+                  </div>
+                  <div className="activity-arrow">
+                    <ChevronRight size={16} />
+                  </div>
+                  <div className="activity-translation">
+                    <span className="activity-label">{t('activity.translation')}:</span>
+                    <span className="activity-text">{truncateText(item.translation)}</span>
+                  </div>
+                </div>
+
+                <div className="activity-item-footer">
+                  <span className="activity-locale">{item.locale}</span>
+                  <span className="activity-time">{formatDate(item.created_at)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ActivityScreen;

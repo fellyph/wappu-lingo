@@ -35,7 +35,8 @@
     "submit": "Enviar",
     "go_back": "Volver",
     "no_strings": "No se encontraron cadenas sin traducir para {{locale}}.",
-    "no_strings_hint": "Intenta seleccionar un proyecto o idioma diferente en Configuración."
+    "no_strings_hint": "Intenta seleccionar un proyecto o idioma diferente en Configuración.",
+    "all_done_badge": "¡Todo al día!"
   },
   "summary": {
     "title": "Resumen de Sesión",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu asomándose",
     "user": "Usuario"
+  },
+  "activity": {
+    "title": "Actividad",
+    "subtitle": "Tus traducciones recientes",
+    "loading": "Cargando actividad...",
+    "empty_title": "Sin Actividad",
+    "empty_message": "¡Empieza a traducir para ver tus contribuciones aquí!",
+    "original": "Original",
+    "translation": "Traducción",
+    "status": {
+      "pending": "Pendiente",
+      "submitted": "Enviada",
+      "approved": "Aprobada",
+      "rejected": "Rechazada"
+    },
+    "time": {
+      "just_now": "Ahora",
+      "minutes_ago": "hace {{count}}min",
+      "hours_ago": "hace {{count}}h",
+      "days_ago": "hace {{count}}d"
+    }
   }
 }

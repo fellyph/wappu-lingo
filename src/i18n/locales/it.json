@@ -35,7 +35,8 @@
     "submit": "Invia",
     "go_back": "Torna Indietro",
     "no_strings": "Nessuna stringa non tradotta trovata per {{locale}}.",
-    "no_strings_hint": "Prova a selezionare un progetto o una lingua diversa nelle Impostazioni."
+    "no_strings_hint": "Prova a selezionare un progetto o una lingua diversa nelle Impostazioni.",
+    "all_done_badge": "Tutto in ordine!"
   },
   "summary": {
     "title": "Riepilogo Sessione",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu che sbircia",
     "user": "Utente"
+  },
+  "activity": {
+    "title": "Attività",
+    "subtitle": "Le tue traduzioni recenti",
+    "loading": "Caricamento attività...",
+    "empty_title": "Nessuna Attività",
+    "empty_message": "Inizia a tradurre per vedere i tuoi contributi qui!",
+    "original": "Originale",
+    "translation": "Traduzione",
+    "status": {
+      "pending": "In attesa",
+      "submitted": "Inviata",
+      "approved": "Approvata",
+      "rejected": "Rifiutata"
+    },
+    "time": {
+      "just_now": "Adesso",
+      "minutes_ago": "{{count}}min fa",
+      "hours_ago": "{{count}}h fa",
+      "days_ago": "{{count}}g fa"
+    }
   }
 }

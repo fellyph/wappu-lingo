@@ -35,7 +35,8 @@
     "submit": "送信",
     "go_back": "戻る",
     "no_strings": "{{locale}}の未翻訳文字列が見つかりません。",
-    "no_strings_hint": "設定で別のプロジェクトや言語を選択してみてください。"
+    "no_strings_hint": "設定で別のプロジェクトや言語を選択してみてください。",
+    "all_done_badge": "すべて完了！"
   },
   "summary": {
     "title": "セッション概要",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "のぞくWapuu",
     "user": "ユーザー"
+  },
+  "activity": {
+    "title": "アクティビティ",
+    "subtitle": "最近の翻訳投稿",
+    "loading": "読み込み中...",
+    "empty_title": "アクティビティなし",
+    "empty_message": "翻訳を始めて、ここに貢献を表示しましょう！",
+    "original": "原文",
+    "translation": "翻訳",
+    "status": {
+      "pending": "保留中",
+      "submitted": "送信済み",
+      "approved": "承認済み",
+      "rejected": "却下"
+    },
+    "time": {
+      "just_now": "たった今",
+      "minutes_ago": "{{count}}分前",
+      "hours_ago": "{{count}}時間前",
+      "days_ago": "{{count}}日前"
+    }
   }
 }

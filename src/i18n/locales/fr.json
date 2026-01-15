@@ -35,7 +35,8 @@
     "submit": "Soumettre",
     "go_back": "Retour",
     "no_strings": "Aucune chaîne non traduite trouvée pour {{locale}}.",
-    "no_strings_hint": "Essayez de sélectionner un projet ou une langue différente dans les Paramètres."
+    "no_strings_hint": "Essayez de sélectionner un projet ou une langue différente dans les Paramètres.",
+    "all_done_badge": "Tout est à jour !"
   },
   "summary": {
     "title": "Résumé de Session",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu qui regarde",
     "user": "Utilisateur"
+  },
+  "activity": {
+    "title": "Activité",
+    "subtitle": "Vos traductions récentes",
+    "loading": "Chargement de l'activité...",
+    "empty_title": "Aucune Activité",
+    "empty_message": "Commencez à traduire pour voir vos contributions ici !",
+    "original": "Original",
+    "translation": "Traduction",
+    "status": {
+      "pending": "En attente",
+      "submitted": "Soumise",
+      "approved": "Approuvée",
+      "rejected": "Rejetée"
+    },
+    "time": {
+      "just_now": "À l'instant",
+      "minutes_ago": "il y a {{count}}min",
+      "hours_ago": "il y a {{count}}h",
+      "days_ago": "il y a {{count}}j"
+    }
   }
 }

@@ -35,7 +35,8 @@
     "submit": "Submit",
     "go_back": "Go Back",
     "no_strings": "No untranslated strings found for {{locale}}.",
-    "no_strings_hint": "Try selecting a different project or language in Settings."
+    "no_strings_hint": "Try selecting a different project or language in Settings.",
+    "all_done_badge": "All caught up!"
   },
   "summary": {
     "title": "Session Summary",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu peaking",
     "user": "User"
+  },
+  "activity": {
+    "title": "Activity",
+    "subtitle": "Your recent translation submissions",
+    "loading": "Loading activity...",
+    "empty_title": "No Activity Yet",
+    "empty_message": "Start translating to see your submissions here!",
+    "original": "Original",
+    "translation": "Translation",
+    "status": {
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "time": {
+      "just_now": "Just now",
+      "minutes_ago": "{{count}}m ago",
+      "hours_ago": "{{count}}h ago",
+      "days_ago": "{{count}}d ago"
+    }
   }
 }

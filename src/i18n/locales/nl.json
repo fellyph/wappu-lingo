@@ -35,7 +35,8 @@
     "submit": "Versturen",
     "go_back": "Terug",
     "no_strings": "Geen onvertaalde teksten gevonden voor {{locale}}.",
-    "no_strings_hint": "Probeer een ander project of taal te selecteren in Instellingen."
+    "no_strings_hint": "Probeer een ander project of taal te selecteren in Instellingen.",
+    "all_done_badge": "Alles bijgewerkt!"
   },
   "summary": {
     "title": "Sessie Samenvatting",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu die gluurt",
     "user": "Gebruiker"
+  },
+  "activity": {
+    "title": "Activiteit",
+    "subtitle": "Je recente vertalingen",
+    "loading": "Activiteit laden...",
+    "empty_title": "Geen Activiteit",
+    "empty_message": "Begin met vertalen om je bijdragen hier te zien!",
+    "original": "Origineel",
+    "translation": "Vertaling",
+    "status": {
+      "pending": "In behandeling",
+      "submitted": "Verzonden",
+      "approved": "Goedgekeurd",
+      "rejected": "Afgewezen"
+    },
+    "time": {
+      "just_now": "Zojuist",
+      "minutes_ago": "{{count}}min geleden",
+      "hours_ago": "{{count}}u geleden",
+      "days_ago": "{{count}}d geleden"
+    }
   }
 }

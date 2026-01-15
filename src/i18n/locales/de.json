@@ -35,7 +35,8 @@
     "submit": "Absenden",
     "go_back": "Zurück",
     "no_strings": "Keine unübersetzten Zeichenketten für {{locale}} gefunden.",
-    "no_strings_hint": "Versuche, ein anderes Projekt oder eine andere Sprache in den Einstellungen auszuwählen."
+    "no_strings_hint": "Versuche, ein anderes Projekt oder eine andere Sprache in den Einstellungen auszuwählen.",
+    "all_done_badge": "Alles erledigt!"
   },
   "summary": {
     "title": "Sitzungszusammenfassung",
@@ -61,5 +62,26 @@
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu schaut hervor",
     "user": "Benutzer"
+  },
+  "activity": {
+    "title": "Aktivität",
+    "subtitle": "Deine letzten Übersetzungen",
+    "loading": "Aktivität wird geladen...",
+    "empty_title": "Keine Aktivität",
+    "empty_message": "Beginne mit dem Übersetzen, um deine Beiträge hier zu sehen!",
+    "original": "Original",
+    "translation": "Übersetzung",
+    "status": {
+      "pending": "Ausstehend",
+      "submitted": "Eingereicht",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt"
+    },
+    "time": {
+      "just_now": "Gerade eben",
+      "minutes_ago": "vor {{count}}min",
+      "hours_ago": "vor {{count}}h",
+      "days_ago": "vor {{count}}T"
+    }
   }
 }
