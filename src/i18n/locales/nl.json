@@ -50,6 +50,7 @@
   },
   "settings": {
     "title": "Instellingen",
+    "subtitle": "Pas je vertaalervaring aan",
     "ui_language": "App Taal",
     "translation_language": "Vertaaltaal",
     "project": "Project",
@@ -61,6 +62,8 @@
     "wapuu_happy": "Blije Wapuu",
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu die gluurt",
+    "wapuu_search": "Wapuu die zoekt",
+    "wapuu_settings": "Wapuu met instellingen",
     "user": "Gebruiker"
   },
   "activity": {
@@ -71,6 +74,13 @@
     "empty_message": "Begin met vertalen om je bijdragen hier te zien!",
     "original": "Origineel",
     "translation": "Vertaling",
+    "weekly_summary": "Weekoverzicht",
+    "strings_approved_week": "Deze Week Goedgekeurde Teksten:",
+    "approved": "Goedgekeurd",
+    "great_job_message": "Goed gedaan! Meer goedkeuringen zijn onderweg.",
+    "keep_going_message": "Blijf vertalen om goedkeuringen te verdienen!",
+    "view_all_translations": "Alle Vertalingen Bekijken",
+    "back_to_summary": "Terug naar Overzicht",
     "status": {
       "pending": "In behandeling",
       "submitted": "Verzonden",

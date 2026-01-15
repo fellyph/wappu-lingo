@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Clock, FileText, Globe, Loader, ChevronRight } from 'lucide-react';
-import { fetchUserTranslations } from '../services/translations';
+import { Clock, FileText, Globe, Loader, ChevronRight, ArrowRight } from 'lucide-react';
+import { fetchUserTranslations, fetchUserStats } from '../services/translations';
 import type { TranslationRecord } from '../types';
+import wapuuImage from '../imgs/original_wapuu.png';
+
+interface WeeklyStats {
+  approved: number;
+  total: number;
+}
 
 interface ActivityScreenProps {
   userId: string | null;
@@ -11,8 +17,10 @@ interface ActivityScreenProps {
 const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
   const { t } = useTranslation();
   const [translations, setTranslations] = useState<TranslationRecord[]>([]);
+  const [weeklyStats, setWeeklyStats] = useState<WeeklyStats>({ approved: 0, total: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllTranslations, setShowAllTranslations] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -20,20 +28,32 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
       return;
     }
 
-    const loadTranslations = async () => {
+    const loadData = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetchUserTranslations(userId, { limit: 50 });
-        setTranslations(response.translations);
+        // Fetch translations and stats in parallel
+        const [translationsResponse, statsResponse] = await Promise.all([
+          fetchUserTranslations(userId, { limit: 50 }),
+          fetchUserStats(userId),
+        ]);
+        setTranslations(translationsResponse.translations);
+        setWeeklyStats({
+          approved: statsResponse.byStatus['approved'] || 0,
+          total: statsResponse.total || 0,
+        });
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load activity');
+        // In development, the API might not be available
+        // Show empty state instead of error
+        console.warn('Failed to load activity data:', err);
+        setTranslations([]);
+        setWeeklyStats({ approved: 0, total: 0 });
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadTranslations();
+    loadData();
   }, [userId]);
 
   const formatDate = (dateString: string | undefined) => {
@@ -76,6 +96,46 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
     );
   }
 
+  // Weekly Summary Card view
+  if (!showAllTranslations) {
+    return (
+      <div className="screen animate-fade-in weekly-summary-screen">
+        <div className="weekly-summary-card">
+          <h2 className="weekly-summary-title">{t('activity.weekly_summary')}</h2>
+
+          <div className="weekly-summary-stats-card">
+            <p className="weekly-summary-label">{t('activity.strings_approved_week')}</p>
+            <div className="weekly-summary-stats-row">
+              <div className="weekly-summary-wapuu-small">
+                <img src={wapuuImage} alt={t('alt.wapuu')} />
+              </div>
+              <div className="weekly-summary-approved">
+                <span className="weekly-summary-approved-label">{t('activity.approved')}:</span>
+                <span className="weekly-summary-approved-value">{weeklyStats.approved}</span>
+              </div>
+              <div className="weekly-summary-wapuu-happy">
+                <img src={wapuuImage} alt={t('alt.wapuu_happy')} />
+              </div>
+            </div>
+            <p className="weekly-summary-message">
+              {weeklyStats.approved > 0
+                ? t('activity.great_job_message')
+                : t('activity.keep_going_message')}
+            </p>
+          </div>
+
+          <button
+            className="btn-outline weekly-summary-btn"
+            onClick={() => setShowAllTranslations(true)}
+          >
+            {t('activity.view_all_translations')} <ArrowRight size={20} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // All Translations list view
   return (
     <div className="screen animate-fade-in">
       <header className="header-navy activity-header">
@@ -89,6 +149,15 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
       </header>
 
       <div className="activity-content">
+        {/* Back to Summary button */}
+        <button
+          className="activity-back-btn"
+          onClick={() => setShowAllTranslations(false)}
+        >
+          <ChevronRight size={16} className="activity-back-icon" />
+          {t('activity.back_to_summary')}
+        </button>
+
         {error && (
           <div className="activity-error">
             <p>{error}</p>
@@ -106,8 +175,8 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
         {!error && translations.length > 0 && (
           <div className="activity-list">
             {translations.map((item, index) => (
-              <div 
-                key={item.id || index} 
+              <div
+                key={item.id || index}
                 className="activity-item"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
@@ -120,7 +189,7 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
                     {t(`activity.status.${item.status}`)}
                   </span>
                 </div>
-                
+
                 <div className="activity-item-body">
                   <div className="activity-original">
                     <span className="activity-label">{t('activity.original')}:</span>

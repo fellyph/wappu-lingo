@@ -50,6 +50,7 @@
   },
   "settings": {
     "title": "Configuración",
+    "subtitle": "Personaliza tu experiencia de traducción",
     "ui_language": "Idioma de la App",
     "translation_language": "Idioma de Traducción",
     "project": "Proyecto",
@@ -61,6 +62,8 @@
     "wapuu_happy": "Wapuu feliz",
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu asomándose",
+    "wapuu_search": "Wapuu buscando",
+    "wapuu_settings": "Wapuu con ajustes",
     "user": "Usuario"
   },
   "activity": {
@@ -71,6 +74,13 @@
     "empty_message": "¡Empieza a traducir para ver tus contribuciones aquí!",
     "original": "Original",
     "translation": "Traducción",
+    "weekly_summary": "Resumen Semanal",
+    "strings_approved_week": "Cadenas Aprobadas esta Semana:",
+    "approved": "Aprobadas",
+    "great_job_message": "¡Buen trabajo! Más aprobaciones están en camino.",
+    "keep_going_message": "¡Sigue traduciendo para ganar aprobaciones!",
+    "view_all_translations": "Ver Todas las Traducciones",
+    "back_to_summary": "Volver al Resumen",
     "status": {
       "pending": "Pendiente",
       "submitted": "Enviada",

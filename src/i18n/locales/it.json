@@ -50,6 +50,7 @@
   },
   "settings": {
     "title": "Impostazioni",
+    "subtitle": "Personalizza la tua esperienza di traduzione",
     "ui_language": "Lingua App",
     "translation_language": "Lingua di Traduzione",
     "project": "Progetto",
@@ -61,6 +62,8 @@
     "wapuu_happy": "Wapuu felice",
     "wapuu": "Wapuu",
     "wapuu_peek": "Wapuu che sbircia",
+    "wapuu_search": "Wapuu che cerca",
+    "wapuu_settings": "Wapuu con impostazioni",
     "user": "Utente"
   },
   "activity": {
@@ -71,6 +74,13 @@
     "empty_message": "Inizia a tradurre per vedere i tuoi contributi qui!",
     "original": "Originale",
     "translation": "Traduzione",
+    "weekly_summary": "Riepilogo Settimanale",
+    "strings_approved_week": "Stringhe Approvate questa Settimana:",
+    "approved": "Approvate",
+    "great_job_message": "Ottimo lavoro! Altre approvazioni sono in arrivo.",
+    "keep_going_message": "Continua a tradurre per ottenere approvazioni!",
+    "view_all_translations": "Vedi Tutte le Traduzioni",
+    "back_to_summary": "Torna al Riepilogo",
     "status": {
       "pending": "In attesa",
       "submitted": "Inviata",
