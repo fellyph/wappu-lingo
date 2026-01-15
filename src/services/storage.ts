@@ -2,6 +2,7 @@ const STORAGE_KEYS = {
   LOCALE: 'wappu_locale',
   PROJECT: 'wappu_project',
   STRINGS_PER_SESSION: 'wappu_strings_per_session',
+  UI_LANGUAGE: 'wappu_ui_language',
 } as const;
 
 interface StorageService {
@@ -11,6 +12,8 @@ interface StorageService {
   setProject: (project: string) => void;
   getStringsPerSession: () => number;
   setStringsPerSession: (count: number) => void;
+  getUILanguage: () => string | null;
+  setUILanguage: (language: string) => void;
 }
 
 export const storage: StorageService = {
@@ -26,4 +29,8 @@ export const storage: StorageService = {
   },
   setStringsPerSession: (count: number) =>
     localStorage.setItem(STORAGE_KEYS.STRINGS_PER_SESSION, count.toString()),
+
+  getUILanguage: () => localStorage.getItem(STORAGE_KEYS.UI_LANGUAGE),
+  setUILanguage: (language: string) =>
+    localStorage.setItem(STORAGE_KEYS.UI_LANGUAGE, language),
 };

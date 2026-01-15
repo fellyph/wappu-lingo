@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Wapuu wird geladen..."
+  },
+  "login": {
+    "tagline": "Gamifiziere deine WordPress-Übersetzungen und werde Teil der Community. Melde dich mit deinem Gravatar-Konto an, um loszulegen.",
+    "button": "Mit Gravatar anmelden",
+    "footer": "Unterstützt von WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "WordPress Übersetzer",
+    "logout_tooltip": "Klicken zum Abmelden",
+    "stats": {
+      "translated": "Übersetzt:",
+      "approved": "Genehmigt:"
+    },
+    "welcome": "Willkommen zurück, <strong>{{name}}</strong>!",
+    "start_button": "Übersetzen starten!",
+    "loading_button": "Lädt..."
+  },
+  "translation": {
+    "translate_to": "Übersetzen nach: {{locale}}",
+    "loading": "Zeichenketten werden geladen...",
+    "original_string": "Originaltext:",
+    "priority": {
+      "high": "Priorität",
+      "normal": "Normal"
+    },
+    "context": "Kontext: {{context}}",
+    "source": "Quelle: {{project}}",
+    "your_translation": "Deine Übersetzung:",
+    "placeholder": "Hier übersetzen...",
+    "skip": "Überspringen",
+    "submit": "Absenden",
+    "go_back": "Zurück",
+    "no_strings": "Keine unübersetzten Zeichenketten für {{locale}} gefunden.",
+    "no_strings_hint": "Versuche, ein anderes Projekt oder eine andere Sprache in den Einstellungen auszuwählen."
+  },
+  "summary": {
+    "title": "Sitzungszusammenfassung",
+    "this_session": "Diese Sitzung:",
+    "translated": "Übersetzt",
+    "skipped": "Übersprungen",
+    "total": "Gesamt",
+    "success_message": "Tolle Arbeit! Deine Übersetzungen helfen WordPress-Nutzern weltweit.",
+    "empty_message": "Kein Problem! Komm jederzeit wieder, um beizutragen.",
+    "back_button": "Zurück zum Dashboard"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "ui_language": "App-Sprache",
+    "translation_language": "Übersetzungssprache",
+    "project": "Projekt",
+    "strings_per_session": "Zeichenketten pro Sitzung",
+    "strings_count": "{{count}} Zeichenketten"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Fröhlicher Wapuu",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu schaut hervor",
+    "user": "Benutzer"
+  }
+}

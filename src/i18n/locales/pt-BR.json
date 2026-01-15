@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Carregando Wapuu..."
+  },
+  "login": {
+    "tagline": "Gamifique suas traduções do WordPress e junte-se à comunidade. Faça login com sua conta Gravatar para começar.",
+    "button": "Entrar com Gravatar",
+    "footer": "Desenvolvido com WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "Tradutor WordPress",
+    "logout_tooltip": "Clique para sair",
+    "stats": {
+      "translated": "Traduzidas:",
+      "approved": "Aprovadas:"
+    },
+    "welcome": "Bem-vindo de volta, <strong>{{name}}</strong>!",
+    "start_button": "Começar a Traduzir!",
+    "loading_button": "Carregando..."
+  },
+  "translation": {
+    "translate_to": "Traduzir para: {{locale}}",
+    "loading": "Carregando strings...",
+    "original_string": "String Original:",
+    "priority": {
+      "high": "Prioridade",
+      "normal": "Normal"
+    },
+    "context": "Contexto: {{context}}",
+    "source": "Fonte: {{project}}",
+    "your_translation": "Sua Tradução:",
+    "placeholder": "Traduza aqui...",
+    "skip": "Pular",
+    "submit": "Enviar",
+    "go_back": "Voltar",
+    "no_strings": "Nenhuma string não traduzida encontrada para {{locale}}.",
+    "no_strings_hint": "Tente selecionar um projeto ou idioma diferente nas Configurações."
+  },
+  "summary": {
+    "title": "Resumo da Sessão",
+    "this_session": "Esta Sessão:",
+    "translated": "Traduzidas",
+    "skipped": "Puladas",
+    "total": "Total",
+    "success_message": "Ótimo trabalho! Suas traduções ajudarão usuários do WordPress em todo o mundo.",
+    "empty_message": "Sem problemas! Volte a qualquer momento para contribuir.",
+    "back_button": "Voltar ao Painel"
+  },
+  "settings": {
+    "title": "Configurações",
+    "ui_language": "Idioma do App",
+    "translation_language": "Idioma de Tradução",
+    "project": "Projeto",
+    "strings_per_session": "Strings por Sessão",
+    "strings_count": "{{count}} strings"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Wapuu feliz",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu espiando",
+    "user": "Usuário"
+  }
+}

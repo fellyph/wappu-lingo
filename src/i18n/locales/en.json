@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Loading Wapuu..."
+  },
+  "login": {
+    "tagline": "Gamify your WordPress translations and join the community. Login with your Gravatar account to start.",
+    "button": "Login with Gravatar",
+    "footer": "Powered by WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "WordPress Translator",
+    "logout_tooltip": "Click to Logout",
+    "stats": {
+      "translated": "Translated:",
+      "approved": "Approved:"
+    },
+    "welcome": "Welcome back, <strong>{{name}}</strong>!",
+    "start_button": "Start Translating!",
+    "loading_button": "Loading..."
+  },
+  "translation": {
+    "translate_to": "Translate to: {{locale}}",
+    "loading": "Loading strings...",
+    "original_string": "Original String:",
+    "priority": {
+      "high": "Priority",
+      "normal": "Normal"
+    },
+    "context": "Context: {{context}}",
+    "source": "Source: {{project}}",
+    "your_translation": "Your Translation:",
+    "placeholder": "Translate here...",
+    "skip": "Skip",
+    "submit": "Submit",
+    "go_back": "Go Back",
+    "no_strings": "No untranslated strings found for {{locale}}.",
+    "no_strings_hint": "Try selecting a different project or language in Settings."
+  },
+  "summary": {
+    "title": "Session Summary",
+    "this_session": "This Session:",
+    "translated": "Translated",
+    "skipped": "Skipped",
+    "total": "Total",
+    "success_message": "Great job! Your translations will help WordPress users worldwide.",
+    "empty_message": "No worries! Come back anytime to contribute.",
+    "back_button": "Back to Dashboard"
+  },
+  "settings": {
+    "title": "Settings",
+    "ui_language": "App Language",
+    "translation_language": "Translation Language",
+    "project": "Project",
+    "strings_per_session": "Strings per Session",
+    "strings_count": "{{count}} strings"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Happy Wapuu",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu peaking",
+    "user": "User"
+  }
+}

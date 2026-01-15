@@ -1,7 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
 import { mockAuthenticatedUser } from './helpers/auth';
-import { mockAllAPIs, mockGlotPressAPI, mockBackendAPI, mockEmptyStrings } from './helpers/api';
-import { mockStrings } from './fixtures/strings';
 
 /**
  * Helper to wait for translation screen to be ready

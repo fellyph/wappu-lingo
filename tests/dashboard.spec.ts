@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { mockAuthenticatedUser } from './helpers/auth';
-import { mockAllAPIs, mockGlotPressAPI, mockBackendAPI } from './helpers/api';
+import { mockGlotPressAPI, mockBackendAPI } from './helpers/api';
 import { mockUser } from './fixtures/user';
 
 test.describe('Dashboard', () => {
