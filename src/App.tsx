@@ -169,12 +169,16 @@ const App: React.FC = () => {
             user={user}
             onLogout={handleLogout}
             isSessionLoading={session.isLoading}
+            currentProject={settings.project}
+            availableProjects={settings.availableProjects}
+            onProjectChange={settings.setProject}
           />
         )}
         {screen === 'translating' && (
           <TranslationScreen
             value={translationValue}
             onChange={(e) => setTranslationValue(e.target.value)}
+            onTranscription={(text) => setTranslationValue(text)}
             onSubmit={handleSubmit}
             onSkip={handleSkip}
             currentString={session.currentString}

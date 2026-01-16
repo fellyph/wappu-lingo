@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Wappu Lingo",
+    "name": "Wapuu Lingo",
     "loading": "جارٍ تحميل وابو..."
   },
   "login": {
@@ -93,5 +93,16 @@
       "hours_ago": "منذ {{count}} ساعة",
       "days_ago": "منذ {{count}} يوم"
     }
+  },
+  "audio": {
+    "record": "تسجيل",
+    "stop": "إيقاف",
+    "upload": "رفع",
+    "processing": "جارٍ النسخ...",
+    "retry": "إعادة المحاولة",
+    "error_permission": "تم رفض الوصول للميكروفون",
+    "error_format": "صيغة صوت غير مدعومة",
+    "error_size": "الملف كبير جداً (الحد الأقصى 10 ميجابايت)",
+    "error_failed": "فشل النسخ. حاول مرة أخرى."
   }
 }

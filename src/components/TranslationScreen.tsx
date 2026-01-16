@@ -2,11 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { Check, SkipForward, Loader, Home } from 'lucide-react';
 import type { TranslationString, Locale, Project } from '../types';
 import wapuuImage from '../imgs/original_wapuu.png';
-import searchWapuuImage from '../imgs/search-wappu.png';
+import searchWapuuImage from '../imgs/search-wapuu.png';
+import AudioInput from './AudioInput';
 
 interface TranslationScreenProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onTranscription: (text: string) => void;
   onSubmit: () => void;
   onSkip: () => void;
   currentString: TranslationString | null;
@@ -21,6 +23,7 @@ interface TranslationScreenProps {
 const TranslationScreen: React.FC<TranslationScreenProps> = ({
   value,
   onChange,
+  onTranscription,
   onSubmit,
   onSkip,
   currentString,
@@ -126,6 +129,10 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
               placeholder={t('translation.placeholder')}
               value={value}
               onChange={onChange}
+            />
+            <AudioInput
+              onTranscription={onTranscription}
+              targetLocale={locale.code}
             />
           </div>
 

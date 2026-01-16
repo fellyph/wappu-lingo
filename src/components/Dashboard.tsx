@@ -1,6 +1,6 @@
 import { useTranslation, Trans } from 'react-i18next';
 import { ShieldCheck, Check } from 'lucide-react';
-import type { GravatarProfile } from '../types';
+import type { GravatarProfile, Project } from '../types';
 import wapuuImage from '../imgs/original_wapuu.png';
 
 interface Stats {
@@ -14,6 +14,9 @@ interface DashboardProps {
   user: GravatarProfile | null;
   onLogout: () => void;
   isSessionLoading: boolean;
+  currentProject: Project;
+  availableProjects: Project[];
+  onProjectChange: (projectId: string) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({
@@ -22,6 +25,9 @@ const Dashboard: React.FC<DashboardProps> = ({
   user,
   onLogout,
   isSessionLoading,
+  currentProject,
+  availableProjects,
+  onProjectChange,
 }) => {
   const { t } = useTranslation();
 
@@ -68,9 +74,24 @@ const Dashboard: React.FC<DashboardProps> = ({
             components={{ strong: <strong /> }}
           />
         </div>
-        <button className="btn-primary" onClick={onStart} disabled={isSessionLoading}>
-          {isSessionLoading ? t('dashboard.loading_button') : t('dashboard.start_button')}
-        </button>
+
+        <div className="dashboard-action-row">
+          <select
+            className="project-select"
+            value={currentProject?.id || ''}
+            onChange={(e) => onProjectChange(e.target.value)}
+            disabled={isSessionLoading || !availableProjects.length}
+          >
+            {availableProjects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+          <button className="btn-primary" onClick={onStart} disabled={isSessionLoading || !currentProject}>
+            {isSessionLoading ? t('dashboard.loading_button') : t('dashboard.start_button')}
+          </button>
+        </div>
 
         <div className="mascot-container animate-bounce">
           <img src={wapuuImage} alt={t('alt.wapuu_happy')} />

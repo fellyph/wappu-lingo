@@ -1,5 +1,5 @@
 /**
- * Shared type definitions for Wappu Lingo
+ * Shared type definitions for Wapuu Lingo
  */
 
 // =============================================================================
@@ -208,3 +208,19 @@ export interface UseTranslationSessionReturn {
   skipString: () => void;
   resetSession: () => void;
 }
+
+// =============================================================================
+// Audio Transcription Types
+// =============================================================================
+
+export interface TranscribeRequest {
+  audio: string;
+  mimeType: string;
+  targetLocale?: string;
+}
+
+export interface TranscribeResponse {
+  transcription: string;
+}
+
+export type AudioInputStatus = 'idle' | 'recording' | 'processing' | 'error';

@@ -1,8 +1,8 @@
 const STORAGE_KEYS = {
-  LOCALE: 'wappu_locale',
-  PROJECT: 'wappu_project',
-  STRINGS_PER_SESSION: 'wappu_strings_per_session',
-  UI_LANGUAGE: 'wappu_ui_language',
+  LOCALE: 'wapuu_locale',
+  PROJECT: 'wapuu_project',
+  STRINGS_PER_SESSION: 'wapuu_strings_per_session',
+  UI_LANGUAGE: 'wapuu_ui_language',
 } as const;
 
 interface StorageService {

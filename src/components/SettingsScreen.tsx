@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Globe, Package, Hash, Languages } from 'lucide-react';
 import type { UseSettingsReturn } from '../types';
-import settingsWapuuImage from '../imgs/settings-wappu.png';
+import settingsWapuuImage from '../imgs/settings-wapuu.png';
 
 interface SettingsScreenProps {
   settings: UseSettingsReturn;

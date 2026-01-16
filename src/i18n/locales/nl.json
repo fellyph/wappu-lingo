@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Wappu Lingo",
+    "name": "Wapuu Lingo",
     "loading": "Wapuu laden..."
   },
   "login": {
@@ -93,5 +93,16 @@
       "hours_ago": "{{count}}u geleden",
       "days_ago": "{{count}}d geleden"
     }
+  },
+  "audio": {
+    "record": "Opnemen",
+    "stop": "Stop",
+    "upload": "Uploaden",
+    "processing": "Transcriberen...",
+    "retry": "Opnieuw proberen",
+    "error_permission": "Microfoontoegang geweigerd",
+    "error_format": "Niet-ondersteund audioformaat",
+    "error_size": "Bestand te groot (max 10MB)",
+    "error_failed": "Transcriptie mislukt. Probeer opnieuw."
   }
 }
