@@ -12,7 +12,6 @@ import SettingsScreen from './components/SettingsScreen';
 import ActivityScreen from './components/ActivityScreen';
 import type { GravatarProfile } from './types';
 
-const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1';
 const REDIRECT_URI = window.location.origin + '/';
 
 type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings' | 'activity';
@@ -29,12 +28,25 @@ const App: React.FC = () => {
   const [user, setUser] = useState<GravatarProfile | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('gravatar_token'));
   const [isLoading, setIsLoading] = useState(false);
+  const [clientId, setClientId] = useState<string | null>(null);
 
   // Use new hooks
   const settings = useSettings();
   const session = useTranslationSession();
 
   const { t } = useTranslation();
+
+  // Fetch config (client ID) from server
+  useEffect(() => {
+    fetch('/api/config')
+      .then((res) => res.json() as Promise<{ gravatarClientId: string }>)
+      .then((data) => {
+        setClientId(data.gravatarClientId);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch config:', err);
+      });
+  }, []);
 
   // Fetch user stats from the database when user is loaded
   useEffect(() => {
@@ -89,8 +101,9 @@ const App: React.FC = () => {
   }, [token, user]);
 
   const handleLogin = () => {
+    if (!clientId) return;
     const scopes = ['auth', 'gravatar-profile:read'].map((s, i) => `scope[${i}]=${s}`).join('&');
-    const authUrl = `https://public-api.wordpress.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&${scopes}`;
+    const authUrl = `https://public-api.wordpress.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&${scopes}`;
     window.location.href = authUrl;
   };
 
@@ -139,7 +152,7 @@ const App: React.FC = () => {
   };
 
   if (!token && !isLoading) {
-    return <LoginScreen onLogin={handleLogin} />;
+    return <LoginScreen onLogin={handleLogin} isLoading={!clientId} />;
   }
 
   if (isLoading) {

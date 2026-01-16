@@ -7,6 +7,19 @@ import {
 } from '../fixtures/strings';
 
 /**
+ * Mock config API endpoint (returns OAuth client ID)
+ */
+export async function mockConfigAPI(page: Page) {
+  await page.route('**/api/config', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ gravatarClientId: '12345' }),
+    });
+  });
+}
+
+/**
  * Mock GlotPress API endpoints
  * The app uses corsproxy.io with URL-encoded target URLs
  * Example: https://corsproxy.io/?https%3A%2F%2Ftranslate.wordpress.org%2Fapi%2Fprojects%2F...
@@ -63,6 +76,7 @@ export async function mockBackendAPI(page: Page) {
  * Mock all external APIs
  */
 export async function mockAllAPIs(page: Page) {
+  await mockConfigAPI(page);
   await mockGlotPressAPI(page);
   await mockBackendAPI(page);
 }

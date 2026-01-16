@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { mockAuthenticatedUser, clearAuthentication, mockAuthError } from './helpers/auth';
-import { mockBackendAPI } from './helpers/api';
+import { mockBackendAPI, mockConfigAPI } from './helpers/api';
 
 test.describe('Login Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any existing authentication
     await clearAuthentication(page);
+    // Mock config API so login button gets enabled
+    await mockConfigAPI(page);
   });
 
   test('displays login screen when not authenticated', async ({ page }) => {

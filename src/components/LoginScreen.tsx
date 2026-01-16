@@ -4,9 +4,10 @@ import wapuuImage from '../imgs/original_wapuu.png';
 
 interface LoginScreenProps {
   onLogin: () => void;
+  isLoading?: boolean;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, isLoading = false }) => {
   const { t } = useTranslation();
 
   return (
@@ -18,8 +19,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
         <h1>{t('app.name')}</h1>
         <p>{t('login.tagline')}</p>
 
-        <button className="btn-login" onClick={onLogin}>
-          <LogIn size={20} style={{ marginRight: 10 }} /> {t('login.button')}
+        <button className="btn-login" onClick={onLogin} disabled={isLoading}>
+          <LogIn size={20} style={{ marginRight: 10 }} /> {isLoading ? t('app.loading') : t('login.button')}
         </button>
 
         <div className="login-footer">{t('login.footer')}</div>
