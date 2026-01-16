@@ -12,7 +12,7 @@ import SettingsScreen from './components/SettingsScreen';
 import ActivityScreen from './components/ActivityScreen';
 import type { GravatarProfile } from './types';
 
-const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1'; // Placeholder
+const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1';
 const REDIRECT_URI = window.location.origin + '/';
 
 type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings' | 'activity';
