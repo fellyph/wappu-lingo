@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Home, Users, ShieldCheck, Settings } from 'lucide-react';
 import { useSettings } from './hooks/useSettings';
 import { useTranslationSession } from './hooks/useTranslationSession';
@@ -8,12 +9,13 @@ import LoginScreen from './components/LoginScreen';
 import TranslationScreen from './components/TranslationScreen';
 import SummaryScreen from './components/SummaryScreen';
 import SettingsScreen from './components/SettingsScreen';
+import ActivityScreen from './components/ActivityScreen';
 import type { GravatarProfile } from './types';
 
 const CLIENT_ID = import.meta.env.VITE_GRAVATAR_CLIENT_ID || '1'; // Placeholder
 const REDIRECT_URI = window.location.origin + '/';
 
-type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings';
+type ScreenType = 'dashboard' | 'translating' | 'summary' | 'settings' | 'activity';
 
 interface Stats {
   translated: number;
@@ -31,6 +33,8 @@ const App: React.FC = () => {
   // Use new hooks
   const settings = useSettings();
   const session = useTranslationSession();
+
+  const { t } = useTranslation();
 
   // Fetch user stats from the database when user is loaded
   useEffect(() => {
@@ -139,7 +143,7 @@ const App: React.FC = () => {
   }
 
   if (isLoading) {
-    return <div className="loading-screen">Loading Wapuu...</div>;
+    return <div className="loading-screen">{t('app.loading')}</div>;
   }
 
   return (
@@ -180,6 +184,11 @@ const App: React.FC = () => {
             onStringsPerSessionChange={settings.setStringsPerSession}
           />
         )}
+        {screen === 'activity' && (
+          <ActivityScreen
+            userId={user?.hash || user?.profile_url?.split('/').pop() || null}
+          />
+        )}
       </main>
 
       <nav className="bottom-nav">
@@ -189,7 +198,10 @@ const App: React.FC = () => {
         >
           <Home size={24} />
         </button>
-        <button>
+        <button
+          className={screen === 'activity' ? 'active' : ''}
+          onClick={() => setScreen('activity')}
+        >
           <Users size={24} />
         </button>
         <button>

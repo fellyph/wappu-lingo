@@ -1,0 +1,97 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Loading Wapuu..."
+  },
+  "login": {
+    "tagline": "Gamify your WordPress translations and join the community. Login with your Gravatar account to start.",
+    "button": "Login with Gravatar",
+    "footer": "Powered by WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "WordPress Translator",
+    "logout_tooltip": "Click to Logout",
+    "stats": {
+      "translated": "Translated:",
+      "approved": "Approved:"
+    },
+    "welcome": "Welcome back, <strong>{{name}}</strong>!",
+    "start_button": "Start Translating!",
+    "loading_button": "Loading..."
+  },
+  "translation": {
+    "translate_to": "Translate to: {{locale}}",
+    "loading": "Loading strings...",
+    "original_string": "Original String:",
+    "priority": {
+      "high": "Priority",
+      "normal": "Normal"
+    },
+    "context": "Context: {{context}}",
+    "source": "Source: {{project}}",
+    "your_translation": "Your Translation:",
+    "placeholder": "Translate here...",
+    "skip": "Skip",
+    "submit": "Submit",
+    "go_back": "Go Back",
+    "no_strings": "No untranslated strings found for {{locale}}.",
+    "no_strings_hint": "Try selecting a different project or language in Settings.",
+    "all_done_badge": "All caught up!"
+  },
+  "summary": {
+    "title": "Session Summary",
+    "this_session": "This Session:",
+    "translated": "Translated",
+    "skipped": "Skipped",
+    "total": "Total",
+    "success_message": "Great job! Your translations will help WordPress users worldwide.",
+    "empty_message": "No worries! Come back anytime to contribute.",
+    "back_button": "Back to Dashboard"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your translation experience",
+    "ui_language": "App Language",
+    "translation_language": "Translation Language",
+    "project": "Project",
+    "strings_per_session": "Strings per Session",
+    "strings_count": "{{count}} strings"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Happy Wapuu",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu peaking",
+    "wapuu_search": "Wapuu searching",
+    "wapuu_settings": "Wapuu with settings",
+    "user": "User"
+  },
+  "activity": {
+    "title": "Activity",
+    "subtitle": "Your recent translation submissions",
+    "loading": "Loading activity...",
+    "empty_title": "No Activity Yet",
+    "empty_message": "Start translating to see your submissions here!",
+    "original": "Original",
+    "translation": "Translation",
+    "weekly_summary": "Weekly Summary",
+    "strings_approved_week": "Strings Approved this Week:",
+    "approved": "Approved",
+    "great_job_message": "Great job! More approvals are on the way.",
+    "keep_going_message": "Keep translating to earn approvals!",
+    "view_all_translations": "View All Translations",
+    "back_to_summary": "Back to Summary",
+    "status": {
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "time": {
+      "just_now": "Just now",
+      "minutes_ago": "{{count}}m ago",
+      "hours_ago": "{{count}}h ago",
+      "days_ago": "{{count}}d ago"
+    }
+  }
+}

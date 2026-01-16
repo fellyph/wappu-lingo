@@ -5,7 +5,6 @@ import {
   mockSubmitResponse,
   mockTranslationsResponse,
 } from '../fixtures/strings';
-import { mockUserStats } from '../fixtures/user';
 
 /**
  * Mock GlotPress API endpoints

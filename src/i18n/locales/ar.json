@@ -1,0 +1,97 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "جارٍ تحميل وابو..."
+  },
+  "login": {
+    "tagline": "حوّل ترجمات ووردبريس إلى لعبة وانضم إلى المجتمع. سجّل الدخول بحساب Gravatar للبدء.",
+    "button": "تسجيل الدخول بـ Gravatar",
+    "footer": "مدعوم من WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "مترجم ووردبريس",
+    "logout_tooltip": "انقر لتسجيل الخروج",
+    "stats": {
+      "translated": "مترجمة:",
+      "approved": "معتمدة:"
+    },
+    "welcome": "مرحباً بعودتك، <strong>{{name}}</strong>!",
+    "start_button": "ابدأ الترجمة!",
+    "loading_button": "جارٍ التحميل..."
+  },
+  "translation": {
+    "translate_to": "ترجمة إلى: {{locale}}",
+    "loading": "جارٍ تحميل النصوص...",
+    "original_string": "النص الأصلي:",
+    "priority": {
+      "high": "أولوية",
+      "normal": "عادي"
+    },
+    "context": "السياق: {{context}}",
+    "source": "المصدر: {{project}}",
+    "your_translation": "ترجمتك:",
+    "placeholder": "ترجم هنا...",
+    "skip": "تخطي",
+    "submit": "إرسال",
+    "go_back": "رجوع",
+    "no_strings": "لم يتم العثور على نصوص غير مترجمة لـ {{locale}}.",
+    "no_strings_hint": "جرب اختيار مشروع أو لغة مختلفة في الإعدادات.",
+    "all_done_badge": "كل شيء مكتمل!"
+  },
+  "summary": {
+    "title": "ملخص الجلسة",
+    "this_session": "هذه الجلسة:",
+    "translated": "مترجمة",
+    "skipped": "تم تخطيها",
+    "total": "المجموع",
+    "success_message": "عمل رائع! ستساعد ترجماتك مستخدمي ووردبريس حول العالم.",
+    "empty_message": "لا بأس! عد في أي وقت للمساهمة.",
+    "back_button": "العودة إلى لوحة التحكم"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "خصّص تجربة الترجمة الخاصة بك",
+    "ui_language": "لغة التطبيق",
+    "translation_language": "لغة الترجمة",
+    "project": "المشروع",
+    "strings_per_session": "النصوص لكل جلسة",
+    "strings_count": "{{count}} نصوص"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "وابو سعيد",
+    "wapuu": "وابو",
+    "wapuu_peek": "وابو يختلس النظر",
+    "wapuu_search": "وابو يبحث",
+    "wapuu_settings": "وابو مع الإعدادات",
+    "user": "مستخدم"
+  },
+  "activity": {
+    "title": "النشاط",
+    "subtitle": "ترجماتك الأخيرة",
+    "loading": "جارٍ تحميل النشاط...",
+    "empty_title": "لا يوجد نشاط",
+    "empty_message": "ابدأ الترجمة لرؤية مساهماتك هنا!",
+    "original": "الأصلي",
+    "translation": "الترجمة",
+    "weekly_summary": "ملخص الأسبوع",
+    "strings_approved_week": "النصوص المعتمدة هذا الأسبوع:",
+    "approved": "معتمدة",
+    "great_job_message": "عمل رائع! المزيد من الاعتمادات في الطريق.",
+    "keep_going_message": "استمر في الترجمة للحصول على اعتمادات!",
+    "view_all_translations": "عرض جميع الترجمات",
+    "back_to_summary": "العودة للملخص",
+    "status": {
+      "pending": "قيد الانتظار",
+      "submitted": "مُرسلة",
+      "approved": "معتمدة",
+      "rejected": "مرفوضة"
+    },
+    "time": {
+      "just_now": "الآن",
+      "minutes_ago": "منذ {{count}} دقيقة",
+      "hours_ago": "منذ {{count}} ساعة",
+      "days_ago": "منذ {{count}} يوم"
+    }
+  }
+}

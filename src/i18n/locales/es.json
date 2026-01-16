@@ -1,0 +1,97 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Cargando Wapuu..."
+  },
+  "login": {
+    "tagline": "Gamifica tus traducciones de WordPress y únete a la comunidad. Inicia sesión con tu cuenta de Gravatar para comenzar.",
+    "button": "Iniciar sesión con Gravatar",
+    "footer": "Desarrollado con WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "Traductor WordPress",
+    "logout_tooltip": "Haz clic para cerrar sesión",
+    "stats": {
+      "translated": "Traducidas:",
+      "approved": "Aprobadas:"
+    },
+    "welcome": "¡Bienvenido de nuevo, <strong>{{name}}</strong>!",
+    "start_button": "¡Empezar a Traducir!",
+    "loading_button": "Cargando..."
+  },
+  "translation": {
+    "translate_to": "Traducir a: {{locale}}",
+    "loading": "Cargando cadenas...",
+    "original_string": "Cadena Original:",
+    "priority": {
+      "high": "Prioridad",
+      "normal": "Normal"
+    },
+    "context": "Contexto: {{context}}",
+    "source": "Fuente: {{project}}",
+    "your_translation": "Tu Traducción:",
+    "placeholder": "Traduce aquí...",
+    "skip": "Omitir",
+    "submit": "Enviar",
+    "go_back": "Volver",
+    "no_strings": "No se encontraron cadenas sin traducir para {{locale}}.",
+    "no_strings_hint": "Intenta seleccionar un proyecto o idioma diferente en Configuración.",
+    "all_done_badge": "¡Todo al día!"
+  },
+  "summary": {
+    "title": "Resumen de Sesión",
+    "this_session": "Esta Sesión:",
+    "translated": "Traducidas",
+    "skipped": "Omitidas",
+    "total": "Total",
+    "success_message": "¡Buen trabajo! Tus traducciones ayudarán a usuarios de WordPress en todo el mundo.",
+    "empty_message": "¡No te preocupes! Vuelve cuando quieras para contribuir.",
+    "back_button": "Volver al Panel"
+  },
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Personaliza tu experiencia de traducción",
+    "ui_language": "Idioma de la App",
+    "translation_language": "Idioma de Traducción",
+    "project": "Proyecto",
+    "strings_per_session": "Cadenas por Sesión",
+    "strings_count": "{{count}} cadenas"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Wapuu feliz",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu asomándose",
+    "wapuu_search": "Wapuu buscando",
+    "wapuu_settings": "Wapuu con ajustes",
+    "user": "Usuario"
+  },
+  "activity": {
+    "title": "Actividad",
+    "subtitle": "Tus traducciones recientes",
+    "loading": "Cargando actividad...",
+    "empty_title": "Sin Actividad",
+    "empty_message": "¡Empieza a traducir para ver tus contribuciones aquí!",
+    "original": "Original",
+    "translation": "Traducción",
+    "weekly_summary": "Resumen Semanal",
+    "strings_approved_week": "Cadenas Aprobadas esta Semana:",
+    "approved": "Aprobadas",
+    "great_job_message": "¡Buen trabajo! Más aprobaciones están en camino.",
+    "keep_going_message": "¡Sigue traduciendo para ganar aprobaciones!",
+    "view_all_translations": "Ver Todas las Traducciones",
+    "back_to_summary": "Volver al Resumen",
+    "status": {
+      "pending": "Pendiente",
+      "submitted": "Enviada",
+      "approved": "Aprobada",
+      "rejected": "Rechazada"
+    },
+    "time": {
+      "just_now": "Ahora",
+      "minutes_ago": "hace {{count}}min",
+      "hours_ago": "hace {{count}}h",
+      "days_ago": "hace {{count}}d"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "app": {
+    "name": "Wappu Lingo",
+    "loading": "Wapuu laden..."
+  },
+  "login": {
+    "tagline": "Gamificeer je WordPress-vertalingen en word lid van de community. Log in met je Gravatar-account om te beginnen.",
+    "button": "Inloggen met Gravatar",
+    "footer": "Mogelijk gemaakt door WordPress.com OAuth"
+  },
+  "dashboard": {
+    "title": "WordPress Vertaler",
+    "logout_tooltip": "Klik om uit te loggen",
+    "stats": {
+      "translated": "Vertaald:",
+      "approved": "Goedgekeurd:"
+    },
+    "welcome": "Welkom terug, <strong>{{name}}</strong>!",
+    "start_button": "Begin met Vertalen!",
+    "loading_button": "Laden..."
+  },
+  "translation": {
+    "translate_to": "Vertalen naar: {{locale}}",
+    "loading": "Teksten laden...",
+    "original_string": "Originele Tekst:",
+    "priority": {
+      "high": "Prioriteit",
+      "normal": "Normaal"
+    },
+    "context": "Context: {{context}}",
+    "source": "Bron: {{project}}",
+    "your_translation": "Jouw Vertaling:",
+    "placeholder": "Vertaal hier...",
+    "skip": "Overslaan",
+    "submit": "Versturen",
+    "go_back": "Terug",
+    "no_strings": "Geen onvertaalde teksten gevonden voor {{locale}}.",
+    "no_strings_hint": "Probeer een ander project of taal te selecteren in Instellingen.",
+    "all_done_badge": "Alles bijgewerkt!"
+  },
+  "summary": {
+    "title": "Sessie Samenvatting",
+    "this_session": "Deze Sessie:",
+    "translated": "Vertaald",
+    "skipped": "Overgeslagen",
+    "total": "Totaal",
+    "success_message": "Goed gedaan! Je vertalingen helpen WordPress-gebruikers wereldwijd.",
+    "empty_message": "Geen probleem! Kom gerust terug om bij te dragen.",
+    "back_button": "Terug naar Dashboard"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "subtitle": "Pas je vertaalervaring aan",
+    "ui_language": "App Taal",
+    "translation_language": "Vertaaltaal",
+    "project": "Project",
+    "strings_per_session": "Teksten per Sessie",
+    "strings_count": "{{count}} teksten"
+  },
+  "alt": {
+    "wp_logo": "WP",
+    "wapuu_happy": "Blije Wapuu",
+    "wapuu": "Wapuu",
+    "wapuu_peek": "Wapuu die gluurt",
+    "wapuu_search": "Wapuu die zoekt",
+    "wapuu_settings": "Wapuu met instellingen",
+    "user": "Gebruiker"
+  },
+  "activity": {
+    "title": "Activiteit",
+    "subtitle": "Je recente vertalingen",
+    "loading": "Activiteit laden...",
+    "empty_title": "Geen Activiteit",
+    "empty_message": "Begin met vertalen om je bijdragen hier te zien!",
+    "original": "Origineel",
+    "translation": "Vertaling",
+    "weekly_summary": "Weekoverzicht",
+    "strings_approved_week": "Deze Week Goedgekeurde Teksten:",
+    "approved": "Goedgekeurd",
+    "great_job_message": "Goed gedaan! Meer goedkeuringen zijn onderweg.",
+    "keep_going_message": "Blijf vertalen om goedkeuringen te verdienen!",
+    "view_all_translations": "Alle Vertalingen Bekijken",
+    "back_to_summary": "Terug naar Overzicht",
+    "status": {
+      "pending": "In behandeling",
+      "submitted": "Verzonden",
+      "approved": "Goedgekeurd",
+      "rejected": "Afgewezen"
+    },
+    "time": {
+      "just_now": "Zojuist",
+      "minutes_ago": "{{count}}min geleden",
+      "hours_ago": "{{count}}u geleden",
+      "days_ago": "{{count}}d geleden"
+    }
+  }
+}
