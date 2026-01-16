@@ -204,27 +204,36 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <nav className="bottom-nav">
+      <nav className="bottom-nav" aria-label={t('nav.main')}>
         <button
           className={screen === 'dashboard' ? 'active' : ''}
           onClick={() => setScreen('dashboard')}
+          aria-label={t('nav.home')}
+          aria-current={screen === 'dashboard' ? 'page' : undefined}
         >
-          <Home size={24} />
+          <Home size={24} aria-hidden="true" />
         </button>
         <button
           className={screen === 'activity' ? 'active' : ''}
           onClick={() => setScreen('activity')}
+          aria-label={t('nav.activity')}
+          aria-current={screen === 'activity' ? 'page' : undefined}
         >
-          <Users size={24} />
+          <Users size={24} aria-hidden="true" />
         </button>
-        <button>
-          <ShieldCheck size={24} />
+        <button
+          aria-label={t('nav.badges')}
+          disabled
+        >
+          <ShieldCheck size={24} aria-hidden="true" />
         </button>
         <button
           className={screen === 'settings' ? 'active' : ''}
           onClick={() => setScreen('settings')}
+          aria-label={t('nav.settings')}
+          aria-current={screen === 'settings' ? 'page' : undefined}
         >
-          <Settings size={24} />
+          <Settings size={24} aria-hidden="true" />
         </button>
       </nav>
     </div>

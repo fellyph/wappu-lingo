@@ -66,6 +66,13 @@
     "wapuu_settings": "Wapuu met instellingen",
     "user": "Gebruiker"
   },
+  "nav": {
+    "main": "Hoofdnavigatie",
+    "home": "Home",
+    "activity": "Activiteit",
+    "badges": "Badges",
+    "settings": "Instellingen"
+  },
   "activity": {
     "title": "Activiteit",
     "subtitle": "Je recente vertalingen",

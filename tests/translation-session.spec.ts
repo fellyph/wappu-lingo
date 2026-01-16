@@ -115,8 +115,9 @@ test.describe('Translation Session', () => {
 
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
-      // Badge should be visible (shows Priority or Normal)
-      await expect(page.locator('.badge')).toBeVisible();
+      // Badges should be visible (project badge and priority badge)
+      await expect(page.locator('.badge').first()).toBeVisible();
+      await expect(page.locator('.badge-project')).toBeVisible();
     }
   });
 

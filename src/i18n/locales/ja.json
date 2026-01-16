@@ -66,6 +66,13 @@
     "wapuu_settings": "設定付きのWapuu",
     "user": "ユーザー"
   },
+  "nav": {
+    "main": "メインナビゲーション",
+    "home": "ホーム",
+    "activity": "アクティビティ",
+    "badges": "バッジ",
+    "settings": "設定"
+  },
   "activity": {
     "title": "アクティビティ",
     "subtitle": "最近の翻訳投稿",

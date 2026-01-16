@@ -11,6 +11,12 @@
   --color-text: #001e36;
   --color-text-dim: #5c6d7e;
 
+  /* Project badge colors */
+  --color-project-woocommerce: #7b1fa2;
+  --color-project-wp-core: #1565c0;
+  --color-project-jetpack: #2e7d32;
+  --color-project-akismet: #f9a825;
+
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -449,6 +455,43 @@ h2 {
   font-size: 0.75rem;
   padding: 4px 12px;
   border-radius: var(--radius-full);
+}
+
+/* Card badges container */
+.card-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Project badge base styles */
+.badge-project {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: 0.7rem;
+}
+
+/* Project-specific colors - high contrast for accessibility (WCAG AA) */
+.badge-project-woocommerce {
+  background: var(--color-project-woocommerce);
+  color: var(--color-white);
+}
+
+.badge-project-wp-core {
+  background: var(--color-project-wp-core);
+  color: var(--color-white);
+}
+
+.badge-project-jetpack {
+  background: var(--color-project-jetpack);
+  color: var(--color-white);
+}
+
+.badge-project-akismet {
+  background: var(--color-project-akismet);
+  color: var(--color-navy);
 }
 
 .string-display {
@@ -1345,7 +1388,8 @@ button:disabled:active {
 [dir='rtl'] .stat-item,
 [dir='rtl'] .stat-card,
 [dir='rtl'] .settings-label,
-[dir='rtl'] .card-header {
+[dir='rtl'] .card-header,
+[dir='rtl'] .card-badges {
   flex-direction: row-reverse;
 }
 
