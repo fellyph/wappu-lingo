@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Wappu Lingo",
+    "name": "Wapuu Lingo",
     "loading": "Wapuuを読み込み中..."
   },
   "login": {
@@ -100,5 +100,16 @@
       "hours_ago": "{{count}}時間前",
       "days_ago": "{{count}}日前"
     }
+  },
+  "audio": {
+    "record": "録音",
+    "stop": "停止",
+    "upload": "アップロード",
+    "processing": "文字起こし中...",
+    "retry": "再試行",
+    "error_permission": "マイクへのアクセスが拒否されました",
+    "error_format": "サポートされていない音声形式",
+    "error_size": "ファイルが大きすぎます（最大10MB）",
+    "error_failed": "文字起こしに失敗しました。再試行してください。"
   }
 }

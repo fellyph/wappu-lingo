@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Wappu Lingo",
+    "name": "Wapuu Lingo",
     "loading": "Carregando Wapuu..."
   },
   "login": {
@@ -100,5 +100,16 @@
       "hours_ago": "{{count}}h atrás",
       "days_ago": "{{count}}d atrás"
     }
+  },
+  "audio": {
+    "record": "Gravar",
+    "stop": "Parar",
+    "upload": "Enviar",
+    "processing": "Transcrevendo...",
+    "retry": "Tentar novamente",
+    "error_permission": "Acesso ao microfone negado",
+    "error_format": "Formato de áudio não suportado",
+    "error_size": "Arquivo muito grande (máx. 10MB)",
+    "error_failed": "Falha na transcrição. Tente novamente."
   }
 }

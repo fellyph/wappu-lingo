@@ -50,7 +50,7 @@ i18n
 
     detection: {
       order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'wappu_ui_language',
+      lookupLocalStorage: 'wapuu_ui_language',
       caches: ['localStorage'],
     },
 
