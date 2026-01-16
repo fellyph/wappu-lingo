@@ -66,6 +66,13 @@
     "wapuu_settings": "Wapuu con impostazioni",
     "user": "Utente"
   },
+  "nav": {
+    "main": "Navigazione principale",
+    "home": "Home",
+    "activity": "Attività",
+    "badges": "Badge",
+    "settings": "Impostazioni"
+  },
   "activity": {
     "title": "Attività",
     "subtitle": "Le tue traduzioni recenti",

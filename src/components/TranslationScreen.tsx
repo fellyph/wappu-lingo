@@ -99,11 +99,16 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
         <div className="card">
           <div className="card-header">
             <span className="card-label">{t('translation.original_string')}</span>
-            <span className="badge">
-              {currentString.priority === 'high'
-                ? t('translation.priority.high')
-                : t('translation.priority.normal')}
-            </span>
+            <div className="card-badges">
+              <span className={`badge badge-project badge-project-${project.id}`}>
+                {project.name}
+              </span>
+              <span className="badge">
+                {currentString.priority === 'high'
+                  ? t('translation.priority.high')
+                  : t('translation.priority.normal')}
+              </span>
+            </div>
           </div>
 
           <div className="string-display">{currentString.singular}</div>
