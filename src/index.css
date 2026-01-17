@@ -2130,6 +2130,100 @@ button:disabled:active {
   margin-bottom: 24px;
 }
 
+/* Single button design */
+.audio-btn-single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-gray-light);
+  color: var(--color-navy);
+  border: 2px solid var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.audio-btn-single:hover:not(:disabled) {
+  background: var(--color-gray);
+  border-color: var(--color-navy);
+  transform: scale(1.05);
+}
+
+.audio-btn-single:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.audio-btn-single.recording {
+  background: var(--color-error-light);
+  color: var(--color-error);
+  border-color: var(--color-error);
+  width: auto;
+  min-width: 100px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+}
+
+.audio-btn-single.recording:hover {
+  background: #ffcdd2;
+}
+
+.audio-btn-single.processing {
+  opacity: 0.8;
+}
+
+.audio-btn-single .recording-time {
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.audio-btn-single .recording-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-error);
+  border-radius: 50%;
+  animation: pulse-recording 1s ease-in-out infinite;
+}
+
+.audio-btn-single.recording .recording-dot {
+  position: static;
+}
+
+/* Model loading progress */
+.audio-model-loading {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.audio-model-progress {
+  height: 4px;
+  background: var(--color-gray-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.audio-model-progress-fill {
+  height: 100%;
+  background: var(--color-info);
+  transition: width 0.3s ease;
+}
+
+.audio-model-message {
+  font-size: 0.75rem;
+  color: var(--color-info);
+}
+
+/* Legacy button styles (kept for compatibility) */
 .audio-input-buttons {
   display: flex;
   gap: 12px;

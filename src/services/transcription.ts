@@ -15,24 +15,51 @@ export class TranscriptionError extends Error {
   }
 }
 
+export type ModelStatus = 'not_loaded' | 'loading' | 'ready' | 'error';
+
+export interface ModelLoadingProgress {
+  status: ModelStatus;
+  message: string;
+  progress: number;
+}
+
 // Whisper worker singleton
 let whisperWorker: Worker | null = null;
-let isWorkerReady = false;
-let isModelLoading = false;
+let modelStatus: ModelStatus = 'not_loaded';
+let loadingProgress = 0;
+let loadingMessage = '';
 
 // Callbacks for pending transcription requests
 let pendingResolve: ((text: string) => void) | null = null;
 let pendingReject: ((error: Error) => void) | null = null;
 
 // Status callback for UI updates
-type StatusCallback = (status: string, message: string) => void;
+type StatusCallback = (progress: ModelLoadingProgress) => void;
 let statusCallback: StatusCallback | null = null;
 
 /**
- * Set a callback to receive status updates during transcription
+ * Set a callback to receive status updates during model loading/transcription
  */
 export function setTranscriptionStatusCallback(callback: StatusCallback | null): void {
   statusCallback = callback;
+  // Immediately notify of current status
+  if (callback) {
+    callback({ status: modelStatus, message: loadingMessage, progress: loadingProgress });
+  }
+}
+
+/**
+ * Get current model status
+ */
+export function getModelStatus(): ModelLoadingProgress {
+  return { status: modelStatus, message: loadingMessage, progress: loadingProgress };
+}
+
+/**
+ * Check if model is ready for transcription
+ */
+export function isModelReady(): boolean {
+  return modelStatus === 'ready';
 }
 
 /**
@@ -47,7 +74,7 @@ function initWorker(): Worker {
   );
 
   whisperWorker.onmessage = (e: MessageEvent) => {
-    const { status, text, error, message } = e.data;
+    const { status, text, error, message, progress } = e.data;
 
     switch (status) {
       case 'initialized':
@@ -55,18 +82,21 @@ function initWorker(): Worker {
         break;
 
       case 'loading':
-        isModelLoading = true;
-        statusCallback?.('loading', message || 'Loading model...');
+        modelStatus = 'loading';
+        loadingMessage = message || 'Loading model...';
+        loadingProgress = progress ?? 0;
+        statusCallback?.({ status: modelStatus, message: loadingMessage, progress: loadingProgress });
         break;
 
       case 'ready':
-        isWorkerReady = true;
-        isModelLoading = false;
-        statusCallback?.('ready', message || 'Model ready');
+        modelStatus = 'ready';
+        loadingMessage = message || 'Model ready';
+        loadingProgress = 100;
+        statusCallback?.({ status: modelStatus, message: loadingMessage, progress: loadingProgress });
         break;
 
       case 'transcribing':
-        statusCallback?.('transcribing', message || 'Transcribing...');
+        statusCallback?.({ status: 'ready', message: message || 'Transcribing...', progress: 100 });
         break;
 
       case 'complete':
@@ -83,13 +113,18 @@ function initWorker(): Worker {
           pendingResolve = null;
           pendingReject = null;
         }
-        isModelLoading = false;
+        modelStatus = 'error';
+        loadingMessage = error || 'Error loading model';
+        statusCallback?.({ status: modelStatus, message: loadingMessage, progress: 0 });
         break;
     }
   };
 
   whisperWorker.onerror = (error) => {
     console.error('Whisper worker error:', error);
+    modelStatus = 'error';
+    loadingMessage = 'Worker error occurred';
+    statusCallback?.({ status: modelStatus, message: loadingMessage, progress: 0 });
     if (pendingReject) {
       pendingReject(new TranscriptionError('Worker error occurred', 'TRANSCRIPTION_FAILED'));
       pendingResolve = null;
@@ -102,12 +137,46 @@ function initWorker(): Worker {
 
 /**
  * Preload the Whisper model (call this early to reduce latency on first transcription)
+ * Returns a promise that resolves when model is ready
  */
-export async function preloadWhisperModel(): Promise<void> {
-  const worker = initWorker();
-  if (!isWorkerReady && !isModelLoading) {
+export function preloadWhisperModel(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const worker = initWorker();
+
+    if (modelStatus === 'ready') {
+      resolve();
+      return;
+    }
+
+    if (modelStatus === 'loading') {
+      // Already loading, wait for it
+      const checkReady = setInterval(() => {
+        if (modelStatus === 'ready') {
+          clearInterval(checkReady);
+          resolve();
+        } else if (modelStatus === 'error') {
+          clearInterval(checkReady);
+          reject(new Error(loadingMessage));
+        }
+      }, 100);
+      return;
+    }
+
+    // Start loading
+    const originalCallback = statusCallback;
+    setTranscriptionStatusCallback((progress) => {
+      originalCallback?.(progress);
+      if (progress.status === 'ready') {
+        setTranscriptionStatusCallback(originalCallback);
+        resolve();
+      } else if (progress.status === 'error') {
+        setTranscriptionStatusCallback(originalCallback);
+        reject(new Error(progress.message));
+      }
+    });
+
     worker.postMessage({ type: 'init' });
-  }
+  });
 }
 
 /**

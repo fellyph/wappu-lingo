@@ -1,12 +1,15 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mic, Square, Upload, Loader } from 'lucide-react';
+import { Mic, Loader } from 'lucide-react';
 import type { AudioInputStatus } from '../types';
+import type { ModelLoadingProgress } from '../services/transcription';
 import {
   transcribeAudio,
   TranscriptionError,
   getPreferredMimeType,
-  validateAudioFile,
+  preloadWhisperModel,
+  setTranscriptionStatusCallback,
+  isModelReady,
 } from '../services/transcription';
 
 interface AudioInputProps {
@@ -24,15 +27,27 @@ const AudioInput: React.FC<AudioInputProps> = ({
   const [status, setStatus] = useState<AudioInputStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [modelProgress, setModelProgress] = useState<ModelLoadingProgress | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<number | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Cleanup on unmount
+  // Preload the Whisper model on mount
   useEffect(() => {
+    // Set up status callback to track loading progress
+    setTranscriptionStatusCallback((progress) => {
+      setModelProgress(progress);
+    });
+
+    // Start preloading the model in background
+    preloadWhisperModel().catch((err) => {
+      console.warn('Model preload failed:', err);
+    });
+
+    // Cleanup
     return () => {
+      setTranscriptionStatusCallback(null);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -152,108 +167,74 @@ const AudioInput: React.FC<AudioInputProps> = ({
     }
   }, []);
 
-  const handleFileUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      // Reset input so same file can be selected again
-      event.target.value = '';
-
-      setError(null);
-
-      try {
-        validateAudioFile(file);
-        await processAudio(file, file.type);
-      } catch (err) {
-        setStatus('error');
-        if (err instanceof TranscriptionError) {
-          switch (err.code) {
-            case 'FILE_TOO_LARGE':
-              setError(t('audio.error_size'));
-              break;
-            case 'UNSUPPORTED_FORMAT':
-              setError(t('audio.error_format'));
-              break;
-            default:
-              setError(t('audio.error_failed'));
-          }
-        } else {
-          setError(t('audio.error_failed'));
-        }
-      }
-    },
-    [processAudio, t]
-  );
+  const toggleRecording = useCallback(() => {
+    if (status === 'recording') {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }, [status, startRecording, stopRecording]);
 
   const handleRetry = () => {
     setStatus('idle');
     setError(null);
   };
 
-  const isDisabled = disabled || status === 'processing';
+  // Determine button state
+  const isRecording = status === 'recording';
+  const isProcessing = status === 'processing';
+  const isModelLoading = modelProgress?.status === 'loading';
+  const isDisabled = disabled || isProcessing || (isModelLoading && !isModelReady());
+
+  // Get button label
+  const getButtonLabel = () => {
+    if (isRecording) return t('audio.stop');
+    if (isProcessing) return t('audio.processing');
+    if (isModelLoading && !isModelReady()) return modelProgress?.message || t('audio.loading_model');
+    return t('audio.record');
+  };
 
   return (
     <div className="audio-input">
-      <div className="audio-input-buttons">
-        {status === 'recording' ? (
-          <button
-            type="button"
-            className="audio-btn audio-btn-stop"
-            onClick={stopRecording}
-            aria-label={t('audio.stop')}
-          >
-            <Square size={18} />
-            <span>{t('audio.stop')}</span>
-          </button>
+      <button
+        type="button"
+        className={`audio-btn-single ${isRecording ? 'recording' : ''} ${isProcessing ? 'processing' : ''}`}
+        onClick={toggleRecording}
+        disabled={isDisabled}
+        aria-label={getButtonLabel()}
+      >
+        {isProcessing || (isModelLoading && !isModelReady()) ? (
+          <Loader className="animate-spin" size={20} />
         ) : (
-          <button
-            type="button"
-            className="audio-btn audio-btn-record"
-            onClick={startRecording}
-            disabled={isDisabled}
-            aria-label={t('audio.record')}
-          >
-            <Mic size={18} />
-            <span>{t('audio.record')}</span>
-          </button>
+          <Mic size={20} className={isRecording ? 'animate-pulse' : ''} />
         )}
+        {isRecording && (
+          <span className="recording-time">{formatTime(recordingTime)}</span>
+        )}
+        {isRecording && <span className="recording-dot" />}
+      </button>
 
-        <button
-          type="button"
-          className="audio-btn audio-btn-upload"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isDisabled}
-          aria-label={t('audio.upload')}
-        >
-          <Upload size={18} />
-          <span>{t('audio.upload')}</span>
-        </button>
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="audio/wav,audio/mp3,audio/mpeg,audio/webm,audio/mp4,audio/ogg,audio/flac"
-          onChange={handleFileUpload}
-          className="audio-file-input"
-          aria-hidden="true"
-        />
-      </div>
-
-      {status === 'recording' && (
-        <div className="audio-recording-indicator">
-          <span className="audio-recording-dot" />
-          <span className="audio-recording-time">{formatTime(recordingTime)}</span>
+      {/* Model loading progress */}
+      {isModelLoading && !isModelReady() && modelProgress && (
+        <div className="audio-model-loading">
+          <div className="audio-model-progress">
+            <div
+              className="audio-model-progress-fill"
+              style={{ width: `${modelProgress.progress}%` }}
+            />
+          </div>
+          <span className="audio-model-message">{modelProgress.message}</span>
         </div>
       )}
 
-      {status === 'processing' && (
+      {/* Processing state */}
+      {isProcessing && (
         <div className="audio-processing">
-          <Loader className="animate-spin" size={16} />
           <span>{t('audio.processing')}</span>
         </div>
       )}
 
+      {/* Error state */}
       {error && (
         <div className="audio-error">
           <span>{error}</span>
