@@ -6,7 +6,6 @@ interface Env {
   // Production: SecretsStoreSecret (has .get() method)
   // Local (.dev.vars): plain string
   GRAVATAR_CLIENT_ID: SecretsStoreSecret | string;
-  GEMINI_API_KEY: SecretsStoreSecret | string;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
