@@ -47,4 +47,8 @@ function mockApiPlugin() {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), mockApiPlugin()],
+  // Optimize lucide-react to avoid loading entire icon library
+  optimizeDeps: {
+    include: ["lucide-react"],
+  },
 });

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, startTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mic, Loader } from 'lucide-react';
 import type { AudioInputStatus } from '../types';
@@ -145,9 +145,11 @@ const AudioInput: React.FC<AudioInputProps> = ({
       setStatus('recording');
       setRecordingTime(0);
 
-      // Start timer
+      // Start timer - use startTransition for non-urgent UI updates
       timerRef.current = window.setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
+        startTransition(() => {
+          setRecordingTime((prev) => prev + 1);
+        });
       }, 1000);
     } catch (err) {
       console.error('Failed to start recording:', err);
