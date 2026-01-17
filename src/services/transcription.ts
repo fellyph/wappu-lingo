@@ -1,36 +1,149 @@
-import type { TranscribeResponse } from '../types';
+/**
+ * Audio transcription service using local Whisper (on-device)
+ * Uses @huggingface/transformers via Web Worker for background processing
+ */
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export class TranscriptionError extends Error {
   constructor(
     message: string,
-    public code: 'PERMISSION_DENIED' | 'FILE_TOO_LARGE' | 'UNSUPPORTED_FORMAT' | 'NETWORK_ERROR' | 'TRANSCRIPTION_FAILED'
+    public code: 'PERMISSION_DENIED' | 'FILE_TOO_LARGE' | 'UNSUPPORTED_FORMAT' | 'NETWORK_ERROR' | 'TRANSCRIPTION_FAILED' | 'MODEL_LOADING'
   ) {
     super(message);
     this.name = 'TranscriptionError';
   }
 }
 
+// Whisper worker singleton
+let whisperWorker: Worker | null = null;
+let isWorkerReady = false;
+let isModelLoading = false;
+
+// Callbacks for pending transcription requests
+let pendingResolve: ((text: string) => void) | null = null;
+let pendingReject: ((error: Error) => void) | null = null;
+
+// Status callback for UI updates
+type StatusCallback = (status: string, message: string) => void;
+let statusCallback: StatusCallback | null = null;
+
 /**
- * Convert a Blob to a base64 string (data portion only, without the prefix)
+ * Set a callback to receive status updates during transcription
  */
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const result = reader.result as string;
-      // Remove the data URL prefix (e.g., "data:audio/webm;base64,")
-      const base64 = result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = () => reject(new Error('Failed to read audio data'));
-    reader.readAsDataURL(blob);
-  });
+export function setTranscriptionStatusCallback(callback: StatusCallback | null): void {
+  statusCallback = callback;
 }
 
 /**
- * Check if a mime type is supported (handles codec suffixes)
+ * Initialize the Whisper worker
+ */
+function initWorker(): Worker {
+  if (whisperWorker) return whisperWorker;
+
+  whisperWorker = new Worker(
+    new URL('../workers/whisper.worker.ts', import.meta.url),
+    { type: 'module' }
+  );
+
+  whisperWorker.onmessage = (e: MessageEvent) => {
+    const { status, text, error, message } = e.data;
+
+    switch (status) {
+      case 'initialized':
+        // Worker script loaded
+        break;
+
+      case 'loading':
+        isModelLoading = true;
+        statusCallback?.('loading', message || 'Loading model...');
+        break;
+
+      case 'ready':
+        isWorkerReady = true;
+        isModelLoading = false;
+        statusCallback?.('ready', message || 'Model ready');
+        break;
+
+      case 'transcribing':
+        statusCallback?.('transcribing', message || 'Transcribing...');
+        break;
+
+      case 'complete':
+        if (pendingResolve) {
+          pendingResolve(text);
+          pendingResolve = null;
+          pendingReject = null;
+        }
+        break;
+
+      case 'error':
+        if (pendingReject) {
+          pendingReject(new TranscriptionError(error || 'Transcription failed', 'TRANSCRIPTION_FAILED'));
+          pendingResolve = null;
+          pendingReject = null;
+        }
+        isModelLoading = false;
+        break;
+    }
+  };
+
+  whisperWorker.onerror = (error) => {
+    console.error('Whisper worker error:', error);
+    if (pendingReject) {
+      pendingReject(new TranscriptionError('Worker error occurred', 'TRANSCRIPTION_FAILED'));
+      pendingResolve = null;
+      pendingReject = null;
+    }
+  };
+
+  return whisperWorker;
+}
+
+/**
+ * Preload the Whisper model (call this early to reduce latency on first transcription)
+ */
+export async function preloadWhisperModel(): Promise<void> {
+  const worker = initWorker();
+  if (!isWorkerReady && !isModelLoading) {
+    worker.postMessage({ type: 'init' });
+  }
+}
+
+/**
+ * Convert audio blob to Float32Array at 16kHz sample rate (required by Whisper)
+ */
+async function audioToFloat32(audioBlob: Blob): Promise<Float32Array> {
+  // Create AudioContext with 16kHz sample rate
+  const audioContext = new AudioContext({ sampleRate: 16000 });
+
+  try {
+    // Decode audio data
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    // Get mono audio data (use first channel or mix if stereo)
+    let audioData: Float32Array;
+    if (audioBuffer.numberOfChannels === 1) {
+      audioData = audioBuffer.getChannelData(0);
+    } else {
+      // Mix stereo to mono
+      const left = audioBuffer.getChannelData(0);
+      const right = audioBuffer.getChannelData(1);
+      audioData = new Float32Array(left.length);
+      for (let i = 0; i < left.length; i++) {
+        audioData[i] = (left[i] + right[i]) / 2;
+      }
+    }
+
+    return audioData;
+  } finally {
+    await audioContext.close();
+  }
+}
+
+/**
+ * Check if a mime type is supported
  */
 function isSupportedAudioType(mimeType: string): boolean {
   if (!mimeType) return false;
@@ -65,7 +178,6 @@ export function validateAudioFile(blob: Blob): void {
   }
 
   // Skip mime type validation for recorded blobs (they might have empty or unusual types)
-  // The server will do final validation
   if (blob.type && !isSupportedAudioType(blob.type)) {
     throw new TranscriptionError(
       `Unsupported audio format: ${blob.type}. Supported formats: WAV, MP3, WebM, MP4, OGG, FLAC.`,
@@ -75,49 +187,58 @@ export function validateAudioFile(blob: Blob): void {
 }
 
 /**
- * Transcribe audio using the backend API
+ * Transcribe audio using local Whisper model (on-device)
  */
 export async function transcribeAudio(
   audioBlob: Blob,
-  mimeType: string,
+  _mimeType: string,
   targetLocale?: string
 ): Promise<string> {
   // Validate before processing
   validateAudioFile(audioBlob);
 
-  // Convert to base64
-  const base64Audio = await blobToBase64(audioBlob);
+  // Initialize worker
+  const worker = initWorker();
 
-  try {
-    const response = await fetch('/api/transcribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        audio: base64Audio,
-        mimeType,
-        targetLocale,
-      }),
+  // Convert audio blob to Float32Array (16kHz mono)
+  const audioData = await audioToFloat32(audioBlob);
+
+  // Create promise for transcription result
+  return new Promise((resolve, reject) => {
+    // Store callbacks for worker response
+    pendingResolve = resolve;
+    pendingReject = reject;
+
+    // Set a timeout for the entire operation (2 minutes max for model loading + transcription)
+    const timeout = setTimeout(() => {
+      if (pendingReject) {
+        pendingReject(new TranscriptionError('Transcription timed out', 'TRANSCRIPTION_FAILED'));
+        pendingResolve = null;
+        pendingReject = null;
+      }
+    }, 120000);
+
+    // Clear timeout when done
+    const originalResolve = pendingResolve;
+    const originalReject = pendingReject;
+
+    pendingResolve = (text: string) => {
+      clearTimeout(timeout);
+      originalResolve(text);
+    };
+
+    pendingReject = (error: Error) => {
+      clearTimeout(timeout);
+      originalReject(error);
+    };
+
+    // Send audio to worker for transcription
+    worker.postMessage({
+      type: 'transcribe',
+      audio: audioData,
+      targetLocale,
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({})) as { error?: string };
-      const errorMessage = errorData.error || 'Transcription failed';
-      throw new TranscriptionError(errorMessage, 'TRANSCRIPTION_FAILED');
-    }
-
-    const data = (await response.json()) as TranscribeResponse;
-    return data.transcription;
-  } catch (error) {
-    if (error instanceof TranscriptionError) {
-      throw error;
-    }
-
-    // Network or other errors
-    throw new TranscriptionError(
-      'Connection error. Please check your internet and try again.',
-      'NETWORK_ERROR'
-    );
-  }
+  });
 }
 
 /**
@@ -144,4 +265,37 @@ export function getPreferredMimeType(): string {
 
   // Fallback
   return 'audio/webm';
+}
+
+/**
+ * Check if WebGPU is available (for optimal performance)
+ */
+export async function isWebGPUAvailable(): Promise<boolean> {
+  if (!('gpu' in navigator)) return false;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gpu = (navigator as any).gpu;
+    const adapter = await gpu.requestAdapter();
+    return adapter !== null;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get transcription capability info
+ */
+export async function getTranscriptionInfo(): Promise<{
+  isLocal: boolean;
+  hasWebGPU: boolean;
+  message: string;
+}> {
+  const hasWebGPU = await isWebGPUAvailable();
+  return {
+    isLocal: true,
+    hasWebGPU,
+    message: hasWebGPU
+      ? 'Using local Whisper with WebGPU acceleration'
+      : 'Using local Whisper (CPU fallback)',
+  };
 }
