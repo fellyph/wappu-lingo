@@ -54,6 +54,9 @@ test.describe('Settings', () => {
     // Translation language is second section (index 1)
     const localeSelect = page.locator('.settings-section').nth(1).locator('select');
 
+    // Wait for options to be populated (options are hidden until dropdown opens)
+    await expect(localeSelect.locator('option')).not.toHaveCount(0);
+
     // Get available options
     const options = await localeSelect.locator('option').all();
     expect(options.length).toBeGreaterThan(0);
@@ -71,6 +74,9 @@ test.describe('Settings', () => {
   test('can change project selection', async ({ page }) => {
     // Project is third section (index 2)
     const projectSelect = page.locator('.settings-section').nth(2).locator('select');
+
+    // Wait for options to be populated
+    await expect(projectSelect.locator('option')).not.toHaveCount(0);
 
     // Get available options
     const options = await projectSelect.locator('option').all();
@@ -90,6 +96,9 @@ test.describe('Settings', () => {
     // Strings per session is fourth section (index 3)
     const stringsSelect = page.locator('.settings-section').nth(3).locator('select');
 
+    // Wait for options to be populated
+    await expect(stringsSelect.locator('option')).not.toHaveCount(0);
+
     // Get current value and available options
     const options = await stringsSelect.locator('option').all();
     expect(options.length).toBe(6);
@@ -105,6 +114,8 @@ test.describe('Settings', () => {
   test('settings persist after navigation', async ({ page }) => {
     // Strings per session is fourth section (index 3)
     const stringsSelect = page.locator('.settings-section').nth(3).locator('select');
+    // Wait for options to be populated
+    await expect(stringsSelect.locator('option')).not.toHaveCount(0);
     // Get available options and select a different one
     const options = await stringsSelect.locator('option').all();
     const thirdValue = await options[2].getAttribute('value');
@@ -125,6 +136,8 @@ test.describe('Settings', () => {
   test('settings persist after page reload', async ({ page }) => {
     // Strings per session is fourth section (index 3)
     const stringsSelect = page.locator('.settings-section').nth(3).locator('select');
+    // Wait for options to be populated
+    await expect(stringsSelect.locator('option')).not.toHaveCount(0);
     // Get available options and select the last one
     const options = await stringsSelect.locator('option').all();
     const lastValue = await options[options.length - 1].getAttribute('value');
@@ -150,6 +163,8 @@ test.describe('Settings', () => {
   test('strings per session has expected options', async ({ page }) => {
     // Strings per session is fourth section (index 3)
     const stringsSelect = page.locator('.settings-section').nth(3).locator('select');
+    // Wait for options to be populated
+    await expect(stringsSelect.locator('option')).not.toHaveCount(0);
     const options = await stringsSelect.locator('option').all();
 
     // Should have 6 options (5, 10, 15, 20, 25, 30) - text may be translated
