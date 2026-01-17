@@ -1,13 +1,49 @@
 /**
  * Whisper Web Worker for on-device audio transcription
  * Uses @huggingface/transformers with WebGPU acceleration
+ * Based on official Hugging Face patterns: https://huggingface.co/docs/transformers.js
  */
 
-import { pipeline } from '@huggingface/transformers';
+import { pipeline, env } from '@huggingface/transformers';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let transcriber: any = null;
-let isInitializing = false;
+// Disable local model loading (always fetch from HuggingFace Hub)
+env.allowLocalModels = false;
+
+/**
+ * Singleton class for Whisper ASR pipeline
+ * Follows the official Hugging Face pattern for lazy loading
+ */
+class WhisperPipeline {
+  static task = 'automatic-speech-recognition' as const;
+  static model = 'onnx-community/whisper-tiny';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static instance: any = null;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async getInstance(progress_callback?: (progress: any) => void) {
+    if (!this.instance) {
+      // Try WebGPU first, fallback to WASM
+      try {
+        this.instance = await pipeline(this.task, this.model, {
+          device: 'webgpu',
+          dtype: 'fp32',
+          progress_callback,
+        });
+        self.postMessage({ status: 'ready', message: 'Model loaded (WebGPU)', progress: 100 });
+      } catch (webgpuError) {
+        console.warn('WebGPU not available, falling back to WASM:', webgpuError);
+        self.postMessage({ status: 'loading', message: 'WebGPU unavailable, using CPU...', progress: 50 });
+
+        this.instance = await pipeline(this.task, this.model, {
+          device: 'wasm',
+          progress_callback,
+        });
+        self.postMessage({ status: 'ready', message: 'Model loaded (CPU)', progress: 100 });
+      }
+    }
+    return this.instance;
+  }
+}
 
 // Map common locale codes to Whisper language codes
 const localeToWhisperLang: Record<string, string> = {
@@ -93,64 +129,49 @@ function getWhisperLanguage(targetLocale?: string): string | undefined {
   return undefined;
 }
 
+/**
+ * Progress callback for model loading
+ * Sends download progress updates to main thread
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function initTranscriber(): Promise<any> {
-  if (transcriber) return transcriber;
-  if (isInitializing) {
-    // Wait for initialization to complete
-    while (isInitializing) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    if (transcriber) return transcriber;
-  }
-
-  isInitializing = true;
-  self.postMessage({ status: 'loading', message: 'Loading speech recognition model...' });
-
-  try {
-    // Use whisper-base for multilingual support (~150MB)
-    // Falls back to WASM if WebGPU is not available
-    transcriber = await pipeline(
-      'automatic-speech-recognition',
-      'onnx-community/whisper-base',
-      {
-        device: 'webgpu',
-        dtype: 'fp32',
-      }
-    );
-
-    self.postMessage({ status: 'ready', message: 'Model loaded successfully' });
-    return transcriber;
-  } catch (webgpuError) {
-    console.warn('WebGPU not available, falling back to WASM:', webgpuError);
-
-    // Fallback to WASM (CPU) if WebGPU is not supported
-    transcriber = await pipeline(
-      'automatic-speech-recognition',
-      'onnx-community/whisper-base',
-      {
-        device: 'wasm',
-      }
-    );
-
-    self.postMessage({ status: 'ready', message: 'Model loaded (WASM fallback)' });
-    return transcriber;
-  } finally {
-    isInitializing = false;
+function handleProgress(progress: any) {
+  if (progress.status === 'progress' && progress.progress !== undefined) {
+    const percent = Math.round(progress.progress);
+    self.postMessage({
+      status: 'loading',
+      message: `Downloading model: ${percent}%`,
+      progress: percent,
+      file: progress.file,
+    });
+  } else if (progress.status === 'done') {
+    self.postMessage({
+      status: 'loading',
+      message: 'Initializing model...',
+      progress: 100,
+    });
+  } else if (progress.status === 'initiate') {
+    self.postMessage({
+      status: 'loading',
+      message: `Loading ${progress.file}...`,
+      progress: 0,
+      file: progress.file,
+    });
   }
 }
 
 // Handle messages from main thread
-self.onmessage = async (e: MessageEvent) => {
-  const { type, audio, targetLocale } = e.data;
+self.onmessage = async (event: MessageEvent) => {
+  const { type, audio, targetLocale } = event.data;
 
   if (type === 'init') {
+    // Pre-load the model
     try {
-      await initTranscriber();
+      self.postMessage({ status: 'loading', message: 'Loading speech recognition model...', progress: 0 });
+      await WhisperPipeline.getInstance(handleProgress);
     } catch (error) {
       self.postMessage({
         status: 'error',
-        error: error instanceof Error ? error.message : 'Failed to initialize model'
+        error: error instanceof Error ? error.message : 'Failed to initialize model',
       });
     }
     return;
@@ -158,14 +179,16 @@ self.onmessage = async (e: MessageEvent) => {
 
   if (type === 'transcribe') {
     try {
-      const pipe = await initTranscriber();
+      // Get pipeline instance (loads model if not already loaded)
+      const transcriber = await WhisperPipeline.getInstance(handleProgress);
 
       self.postMessage({ status: 'transcribing', message: 'Transcribing audio...' });
 
       const language = getWhisperLanguage(targetLocale);
 
+      // Run transcription with chunked processing for longer audio
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const output: any = await pipe(audio, {
+      const output: any = await transcriber(audio, {
         chunk_length_s: 30,
         stride_length_s: 5,
         language: language,
@@ -180,13 +203,13 @@ self.onmessage = async (e: MessageEvent) => {
 
       self.postMessage({
         status: 'complete',
-        text: text.trim()
+        text: text.trim(),
       });
     } catch (error) {
       console.error('Transcription error:', error);
       self.postMessage({
         status: 'error',
-        error: error instanceof Error ? error.message : 'Transcription failed'
+        error: error instanceof Error ? error.message : 'Transcription failed',
       });
     }
   }

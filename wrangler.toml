@@ -2,7 +2,7 @@ name = "wappu-lingo"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "dist"
 
-# Secrets Store bindings
+# Secrets Store bindings (used in production)
 secrets_store_secrets = [
   { binding = "GRAVATAR_CLIENT_ID", store_id = "74de4b75b0b74545ad1210dc1db9c056", secret_name = "gravatar-client-id" }
 ]

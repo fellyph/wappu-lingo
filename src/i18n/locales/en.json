@@ -106,6 +106,7 @@
     "stop": "Stop",
     "upload": "Upload",
     "processing": "Transcribing...",
+    "loading_model": "Loading speech model...",
     "retry": "Retry",
     "error_permission": "Microphone access denied",
     "error_format": "Unsupported audio format",

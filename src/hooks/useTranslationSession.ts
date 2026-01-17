@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { fetchSessionStrings, normalizeString } from '../services/glotpress';
 import { submitTranslation as persistTranslation } from '../services/translations';
 import type {
@@ -28,6 +28,9 @@ export function useTranslationSession(): UseTranslationSessionReturn {
     userId: null,
     userEmail: null,
   });
+
+  // Ref for currentString to enable stable callback
+  const currentStringRef = useRef<TranslationString | null>(null);
 
   /**
    * Start a new translation session
@@ -68,6 +71,11 @@ export function useTranslationSession(): UseTranslationSessionReturn {
    */
   const currentString = strings[currentIndex] || null;
 
+  // Keep ref in sync for stable callback
+  useEffect(() => {
+    currentStringRef.current = currentString;
+  }, [currentString]);
+
   /**
    * Check if session is complete
    */
@@ -82,34 +90,33 @@ export function useTranslationSession(): UseTranslationSessionReturn {
   /**
    * Move to next string after translation submitted
    * Persists the translation to the database
+   * Uses ref pattern for stable callback - prevents child re-renders
    */
-  const submitTranslation = useCallback(
-    async (translation: string) => {
-      const ctx = sessionContext.current;
+  const submitTranslation = useCallback(async (translation: string) => {
+    const ctx = sessionContext.current;
+    const current = currentStringRef.current;
 
-      // Persist to database (fire and forget, don't block UI)
-      if (ctx.userId && ctx.projectSlug && ctx.locale && currentString) {
-        persistTranslation({
-          user_id: ctx.userId,
-          user_email: ctx.userEmail,
-          project_slug: ctx.projectSlug,
-          project_name: ctx.projectName,
-          locale: ctx.locale,
-          original_id: currentString.id,
-          original_string: currentString.singular,
-          translation: translation,
-          context: currentString.context,
-          status: 'pending',
-        }).catch((err) => {
-          console.error('Failed to persist translation:', err);
-        });
-      }
+    // Persist to database (fire and forget, don't block UI)
+    if (ctx.userId && ctx.projectSlug && ctx.locale && current) {
+      persistTranslation({
+        user_id: ctx.userId,
+        user_email: ctx.userEmail,
+        project_slug: ctx.projectSlug,
+        project_name: ctx.projectName,
+        locale: ctx.locale,
+        original_id: current.id,
+        original_string: current.singular,
+        translation: translation,
+        context: current.context,
+        status: 'pending',
+      }).catch((err) => {
+        console.error('Failed to persist translation:', err);
+      });
+    }
 
-      setSessionStats((prev) => ({ ...prev, completed: prev.completed + 1 }));
-      setCurrentIndex((prev) => prev + 1);
-    },
-    [currentString]
-  );
+    setSessionStats((prev) => ({ ...prev, completed: prev.completed + 1 }));
+    setCurrentIndex((prev) => prev + 1);
+  }, []);
 
   /**
    * Skip current string

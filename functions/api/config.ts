@@ -5,19 +5,34 @@ interface SecretsStoreSecret {
 interface Env {
   // Production: SecretsStoreSecret (has .get() method)
   // Local (.dev.vars): plain string
-  GRAVATAR_CLIENT_ID: SecretsStoreSecret | string;
+  GRAVATAR_CLIENT_ID?: SecretsStoreSecret | string;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
-  const binding = context.env.GRAVATAR_CLIENT_ID;
+  try {
+    const binding = context.env.GRAVATAR_CLIENT_ID;
 
-  // Check if it's a Secrets Store binding (has .get method) or a plain string (local dev)
-  const clientId =
-    typeof binding === 'object' && 'get' in binding
-      ? await binding.get()
-      : binding;
+    if (!binding) {
+      // Return empty config if not configured (allows app to run without OAuth)
+      return Response.json({
+        gravatarClientId: null,
+      });
+    }
 
-  return Response.json({
-    gravatarClientId: clientId,
-  });
+    // Check if it's a Secrets Store binding (has .get method) or a plain string (local dev)
+    const clientId =
+      typeof binding === 'object' && 'get' in binding
+        ? await binding.get()
+        : binding;
+
+    return Response.json({
+      gravatarClientId: clientId,
+    });
+  } catch (error) {
+    console.error('Config endpoint error:', error);
+    return Response.json({
+      gravatarClientId: null,
+      error: 'Failed to load config',
+    }, { status: 500 });
+  }
 };

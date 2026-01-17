@@ -28,9 +28,13 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<GravatarProfile | null>(null);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem('gravatar_token')
-  );
+  const [token, setToken] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('gravatar_token');
+    } catch {
+      return null;
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [clientId, setClientId] = useState<string | null>(null);
 
@@ -46,9 +50,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
   }, []);
 
-  // Fetch user profile when token exists
+  // Fetch user profile when token exists but user is not loaded
+  // Use derived boolean to avoid re-runs when user object fields change
+  const hasUser = !!user;
   useEffect(() => {
-    if (token && !user) {
+    if (token && !hasUser) {
       setIsLoading(true);
       fetch('https://api.gravatar.com/v3/me/profile', {
         headers: { Authorization: `Bearer ${token}` },
@@ -56,7 +62,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .then((res) => res.json() as Promise<GravatarProfile>)
         .then((data) => {
           if (data.error) {
-            localStorage.removeItem('gravatar_token');
+            try {
+              localStorage.removeItem('gravatar_token');
+            } catch {
+              // Ignore storage errors
+            }
             setToken(null);
           } else {
             setUser(data);
@@ -65,7 +75,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .catch(() => setToken(null))
         .finally(() => setIsLoading(false));
     }
-  }, [token, user]);
+  }, [token, hasUser]);
 
   const login = useCallback(() => {
     if (!clientId) return;
@@ -77,7 +87,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [clientId]);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('gravatar_token');
+    try {
+      localStorage.removeItem('gravatar_token');
+    } catch {
+      // Ignore storage errors
+    }
     setToken(null);
     setUser(null);
   }, []);
