@@ -156,7 +156,12 @@ const App: React.FC = () => {
   }
 
   if (isLoading) {
-    return <div className="loading-screen">{t('app.loading')}</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner" aria-hidden="true" />
+        <span className="loading-text">{t('app.loading')}</span>
+      </div>
+    );
   }
 
   return (

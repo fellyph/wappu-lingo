@@ -59,7 +59,7 @@ test.describe('Translation Session', () => {
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
       // Use input-group input as placeholder text may be translated
-      const input = page.locator('.input-group input');
+      const input = page.locator('.input-group input[type="text"]');
       await input.fill('Test translation');
 
       const submitButton = page.locator('.btn-success');
@@ -74,7 +74,7 @@ test.describe('Translation Session', () => {
     const stringDisplay = page.locator('.string-display');
     if (await stringDisplay.isVisible()) {
       // Use input-group input as placeholder text may be translated
-      const input = page.locator('.input-group input');
+      const input = page.locator('.input-group input[type="text"]');
       await input.fill('Test translation');
       await page.locator('.btn-success').click();
 

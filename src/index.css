@@ -1,4 +1,7 @@
 :root {
+  /* ========================================
+     COLORS
+     ======================================== */
   --color-navy: #001e36;
   --color-navy-dark: #001424;
   --color-yellow: #fddb33;
@@ -17,6 +20,86 @@
   --color-project-jetpack: #2e7d32;
   --color-project-akismet: #f9a825;
 
+  /* Status colors */
+  --color-error: #c62828;
+  --color-error-light: #ffebee;
+  --color-warning: #e65100;
+  --color-warning-light: #fff3e0;
+  --color-info: #1565c0;
+  --color-info-light: #e3f2fd;
+  --color-success-light: #e8f5e9;
+
+  /* ========================================
+     SPACING SCALE (4px base)
+     ======================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 56px;
+  --space-11: 64px;
+  --space-12: 80px;
+
+  /* ========================================
+     SIZING
+     ======================================== */
+  /* Icons */
+  --icon-sm: 24px;
+  --icon-md: 36px;
+  --icon-lg: 48px;
+  --icon-xl: 56px;
+  --icon-2xl: 64px;
+
+  /* Avatars */
+  --avatar-sm: 40px;
+  --avatar-md: 56px;
+  --avatar-lg: 80px;
+
+  /* Containers */
+  --container-xs: 300px;
+  --container-sm: 400px;
+  --container-md: 480px;
+  --container-lg: 600px;
+  --container-xl: 700px;
+  --container-2xl: 800px;
+  --container-3xl: 900px;
+  --container-max: 1200px;
+
+  /* Navigation */
+  --nav-height: 70px;
+  --nav-width-desktop: 80px;
+  --nav-width-desktop-lg: 100px;
+
+  /* Progress bar */
+  --progress-height: 6px;
+  --progress-height-desktop: 8px;
+
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+  --font-main:
+    'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+
+  /* Font sizes */
+  --text-xs: 0.7rem;
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-lg: 1.1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3rem;
+
+  /* ========================================
+     EFFECTS
+     ======================================== */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -26,9 +109,13 @@
   --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --font-main:
-    'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
+  /* ========================================
+     TRANSITIONS
+     ======================================== */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -149,6 +236,11 @@ button:focus-visible {
     animation: none;
   }
 
+  .loading-spinner {
+    animation: none;
+    border-color: var(--color-yellow);
+  }
+
   button {
     transition: none;
   }
@@ -178,7 +270,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 70px;
+  height: var(--nav-height);
   border-top: 1px solid var(--color-gray);
   background: var(--color-white);
   padding-bottom: env(safe-area-inset-bottom);
@@ -230,8 +322,8 @@ h2 {
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
+  width: var(--avatar-sm);
+  height: var(--avatar-sm);
   background: var(--color-yellow);
   border-radius: 50%;
   overflow: hidden;
@@ -459,7 +551,7 @@ h2 {
 
 /* Translation Screen */
 .progress-bar {
-  height: 6px;
+  height: var(--progress-height);
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
   overflow: hidden;
@@ -724,13 +816,54 @@ input {
 /* Loading Screen */
 .loading-screen {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 24px;
   height: 100vh;
-  background: var(--color-gray-light);
+  background: var(--color-navy);
+  color: var(--color-white);
   font-weight: 600;
-  color: var(--color-navy);
   font-size: 1.2rem;
+  text-align: center;
+  padding: 24px;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--color-yellow);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  opacity: 0.9;
+}
+
+/* Desktop: Make loading screen full viewport */
+@media (min-width: 768px) {
+  .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    z-index: 100;
+  }
+
+  .loading-spinner {
+    width: 64px;
+    height: 64px;
+    border-width: 5px;
+  }
+
+  .loading-screen {
+    font-size: 1.4rem;
+    gap: 32px;
+  }
 }
 
 /* Dash Enhancement */
@@ -897,9 +1030,9 @@ input {
 }
 
 .error-message {
-  color: #d32f2f;
+  color: var(--color-error);
   text-align: center;
-  padding: 16px;
+  padding: var(--space-4);
   font-weight: 500;
 }
 
@@ -1121,13 +1254,13 @@ button:disabled:active {
   /* Sidebar navigation on desktop */
   .bottom-nav {
     flex-direction: column;
-    width: 80px;
+    width: var(--nav-width-desktop);
     height: 100vh;
     border-top: none;
     border-right: 1px solid var(--color-gray);
-    padding: 24px 0;
+    padding: var(--space-6) 0;
     justify-content: flex-start;
-    gap: 16px;
+    gap: var(--space-4);
     order: -1; /* Move nav to left */
   }
 
@@ -1219,8 +1352,8 @@ button:disabled:active {
   }
 
   .user-avatar {
-    width: 56px;
-    height: 56px;
+    width: var(--avatar-md);
+    height: var(--avatar-md);
   }
 
   /* Dashboard content */
@@ -1412,7 +1545,7 @@ button:disabled:active {
 
   /* Progress bar */
   .progress-bar {
-    height: 8px;
+    height: var(--progress-height-desktop);
   }
 }
 
@@ -1422,7 +1555,7 @@ button:disabled:active {
 
 @media (min-width: 1200px) {
   .bottom-nav {
-    width: 100px;
+    width: var(--nav-width-desktop-lg);
   }
 
   .bottom-nav button {
@@ -1575,12 +1708,12 @@ button:disabled:active {
 }
 
 .activity-error {
-  background: #ffebee;
-  color: #c62828;
-  padding: 16px;
+  background: var(--color-error-light);
+  color: var(--color-error);
+  padding: var(--space-4);
   border-radius: var(--radius-sm);
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 
 .activity-empty {
@@ -1667,23 +1800,23 @@ button:disabled:active {
 }
 
 .status-pending {
-  background: #fff3e0;
-  color: #e65100;
+  background: var(--color-warning-light);
+  color: var(--color-warning);
 }
 
 .status-submitted {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--color-info-light);
+  color: var(--color-info);
 }
 
 .status-approved {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--color-success-light);
+  color: var(--color-green);
 }
 
 .status-rejected {
-  background: #ffebee;
-  color: #c62828;
+  background: var(--color-error-light);
+  color: var(--color-error);
 }
 
 .activity-item-body {
@@ -2027,14 +2160,14 @@ button:disabled:active {
 }
 
 .audio-btn-stop {
-  background: #ffebee;
-  color: #c62828;
+  background: var(--color-error-light);
+  color: var(--color-error);
   border-color: #ef9a9a;
 }
 
 .audio-btn-stop:hover {
   background: #ffcdd2;
-  border-color: #c62828;
+  border-color: var(--color-error);
 }
 
 .audio-btn-upload {
@@ -2060,12 +2193,12 @@ button:disabled:active {
 .audio-recording-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 8px 12px;
-  background: #ffebee;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-error-light);
   border-radius: var(--radius-sm);
-  color: #c62828;
+  color: var(--color-error);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -2073,7 +2206,7 @@ button:disabled:active {
 .audio-recording-dot {
   width: 10px;
   height: 10px;
-  background: #c62828;
+  background: var(--color-error);
   border-radius: 50%;
   animation: pulse-recording 1s ease-in-out infinite;
 }
@@ -2096,12 +2229,12 @@ button:disabled:active {
 .audio-processing {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 8px 12px;
-  background: #e3f2fd;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-info-light);
   border-radius: var(--radius-sm);
-  color: #1565c0;
+  color: var(--color-info);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -2110,28 +2243,28 @@ button:disabled:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 12px;
-  padding: 8px 12px;
-  background: #ffebee;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-error-light);
   border-radius: var(--radius-sm);
-  color: #c62828;
+  color: var(--color-error);
   font-size: 0.85rem;
 }
 
 .audio-retry-btn {
   background: transparent;
-  color: #c62828;
+  color: var(--color-error);
   font-weight: 600;
-  padding: 4px 12px;
+  padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-sm);
-  border: 1px solid #c62828;
-  font-size: 0.8rem;
+  border: 1px solid var(--color-error);
+  font-size: var(--text-sm);
 }
 
 .audio-retry-btn:hover {
-  background: #c62828;
-  color: white;
+  background: var(--color-error);
+  color: var(--color-white);
 }
 
 /* Honor prefers-reduced-motion for audio recording pulse */
