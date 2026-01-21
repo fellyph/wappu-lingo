@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Check, SkipForward, Loader, Home } from 'lucide-react';
+import { Check, SkipForward, Loader, Home, Eye } from 'lucide-react';
 import type { TranslationString, Locale, Project } from '../types';
 import wapuuImage from '../imgs/original_wapuu.png';
 import searchWapuuImage from '../imgs/search-wapuu.png';
 import AudioInput from './AudioInput';
+import PlaygroundPreview from './PlaygroundPreview';
+import { usePlayground } from '../hooks/usePlayground';
 
 interface TranslationScreenProps {
   value: string;
@@ -35,6 +37,33 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
   onBack,
 }) => {
   const { t } = useTranslation();
+
+  // Playground preview hook
+  const {
+    isOpen: isPreviewOpen,
+    isLoading: isPreviewLoading,
+    playgroundURL,
+    openPreview,
+    closePreview,
+  } = usePlayground({
+    projectSlug: project.slug,
+    locale: locale.code,
+    wpLocale: locale.wpLocale,
+  });
+
+  // Handle preview button click
+  const handlePreview = () => {
+    if (currentString && value.trim()) {
+      openPreview([
+        {
+          original: currentString.singular,
+          translation: value.trim(),
+          context: currentString.context || undefined,
+          plural: currentString.plural || undefined,
+        },
+      ]);
+    }
+  };
 
   // Loading state
   if (isLoading) {
@@ -141,6 +170,19 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
             />
           </div>
 
+          {/* Preview button */}
+          <button
+            className="btn-preview"
+            onClick={handlePreview}
+            disabled={!value.trim() || isPreviewLoading}
+            title={t('translation.preview_in_wordpress', 'Preview in WordPress')}
+          >
+            <Eye size={18} />
+            {isPreviewLoading
+              ? t('translation.preview_loading', 'Loading...')
+              : t('translation.preview', 'Preview')}
+          </button>
+
           <div className="button-row">
             <button className="btn-secondary" onClick={onSkip}>
               {t('translation.skip')} <SkipForward size={18} />
@@ -155,6 +197,16 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Playground Preview Overlay */}
+      {isPreviewOpen && playgroundURL && (
+        <PlaygroundPreview
+          url={playgroundURL}
+          isOpen={isPreviewOpen}
+          onClose={closePreview}
+          projectName={project.name}
+        />
+      )}
     </div>
   );
 };
