@@ -1,17 +1,46 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AppLayout } from './AppLayout';
-import { LoginPage } from './pages/LoginPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { TranslatePage } from './pages/TranslatePage';
-import { SummaryPage } from './pages/SummaryPage';
-import { SettingsPage } from './pages/SettingsPage';
-import { ActivityPage } from './pages/ActivityPage';
+
+// Lazy load page components for code splitting
+const LoginPage = lazy(() =>
+  import('./pages/LoginPage').then((m) => ({ default: m.LoginPage }))
+);
+const DashboardPage = lazy(() =>
+  import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage }))
+);
+const TranslatePage = lazy(() =>
+  import('./pages/TranslatePage').then((m) => ({ default: m.TranslatePage }))
+);
+const SummaryPage = lazy(() =>
+  import('./pages/SummaryPage').then((m) => ({ default: m.SummaryPage }))
+);
+const SettingsPage = lazy(() =>
+  import('./pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+);
+const ActivityPage = lazy(() =>
+  import('./pages/ActivityPage').then((m) => ({ default: m.ActivityPage }))
+);
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="page-loader">
+    <div className="loading-spinner" />
+  </div>
+);
+
+// Wrap lazy component with Suspense
+const withSuspense = (Component: React.ComponentType) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
+);
 
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <LoginPage />,
+    element: withSuspense(LoginPage),
   },
   {
     element: <ProtectedRoute />,
@@ -19,11 +48,11 @@ export const router = createBrowserRouter([
       {
         element: <AppLayout />,
         children: [
-          { path: '/', element: <DashboardPage /> },
-          { path: '/translate', element: <TranslatePage /> },
-          { path: '/summary', element: <SummaryPage /> },
-          { path: '/settings', element: <SettingsPage /> },
-          { path: '/activity', element: <ActivityPage /> },
+          { path: '/', element: withSuspense(DashboardPage) },
+          { path: '/translate', element: withSuspense(TranslatePage) },
+          { path: '/summary', element: withSuspense(SummaryPage) },
+          { path: '/settings', element: withSuspense(SettingsPage) },
+          { path: '/activity', element: withSuspense(ActivityPage) },
         ],
       },
     ],
