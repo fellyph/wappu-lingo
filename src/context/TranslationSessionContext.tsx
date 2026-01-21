@@ -1,5 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+  type ReactNode,
+} from 'react';
 import { useTranslationSession } from '../hooks/useTranslationSession';
 import type { UseTranslationSessionReturn } from '../types';
 
@@ -19,12 +26,25 @@ export const TranslationSessionProvider = ({
   children,
 }: TranslationSessionProviderProps) => {
   const session = useTranslationSession();
-  const [translationValue, setTranslationValue] = useState('');
+  const [translationValue, setTranslationValueState] = useState('');
+
+  // Stable callback reference to prevent unnecessary re-renders
+  const setTranslationValue = useCallback((value: string) => {
+    setTranslationValueState(value);
+  }, []);
+
+  // Memoize context value to prevent creating new object every render
+  const contextValue = useMemo<TranslationSessionContextType>(
+    () => ({
+      ...session,
+      translationValue,
+      setTranslationValue,
+    }),
+    [session, translationValue, setTranslationValue]
+  );
 
   return (
-    <TranslationSessionContext.Provider
-      value={{ ...session, translationValue, setTranslationValue }}
-    >
+    <TranslationSessionContext.Provider value={contextValue}>
       {children}
     </TranslationSessionContext.Provider>
   );
