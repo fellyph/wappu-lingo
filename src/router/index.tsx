@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AppLayout } from './AppLayout';
+import PageLoader from '../components/PageLoader';
 
 // Lazy load page components for code splitting
 const LoginPage = lazy(() =>
@@ -21,13 +22,6 @@ const SettingsPage = lazy(() =>
 );
 const ActivityPage = lazy(() =>
   import('./pages/ActivityPage').then((m) => ({ default: m.ActivityPage }))
-);
-
-// Loading fallback component
-const PageLoader = () => (
-  <div className="page-loader">
-    <div className="loading-spinner" />
-  </div>
 );
 
 // Wrap lazy component with Suspense
