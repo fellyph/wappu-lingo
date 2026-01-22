@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, SkipForward, Loader, Home } from 'lucide-react';
 import type { TranslationString, Locale, Project } from '../types';
@@ -159,4 +160,4 @@ const TranslationScreen: React.FC<TranslationScreenProps> = ({
   );
 };
 
-export default TranslationScreen;
+export default memo(TranslationScreen);

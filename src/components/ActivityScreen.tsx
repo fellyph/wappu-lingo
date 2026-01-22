@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Clock, FileText, Globe, Loader, ChevronRight, ArrowRight } from 'lucide-react';
-import { fetchUserTranslations, fetchUserStats } from '../services/translations';
+import {
+  fetchUserTranslations,
+  computeStatsFromTranslations,
+} from '../services/translations';
 import type { TranslationRecord } from '../types';
 import wapuuImage from '../imgs/original_wapuu.png';
 
@@ -32,15 +35,19 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
       setIsLoading(true);
       setError(null);
       try {
-        // Fetch translations and stats in parallel
-        const [translationsResponse, statsResponse] = await Promise.all([
-          fetchUserTranslations(userId, { limit: 50 }),
-          fetchUserStats(userId),
-        ]);
-        setTranslations(translationsResponse.translations);
+        // Fetch translations once with higher limit for stats computation
+        const translationsResponse = await fetchUserTranslations(userId, {
+          limit: 100,
+        });
+        const allTranslations = translationsResponse.translations;
+
+        // Compute stats from the same data (no double fetch)
+        const statsFromData = computeStatsFromTranslations(allTranslations);
+
+        setTranslations(allTranslations.slice(0, 50)); // Show first 50 in list
         setWeeklyStats({
-          approved: statsResponse.byStatus['approved'] || 0,
-          total: statsResponse.total || 0,
+          approved: statsFromData.byStatus['approved'] || 0,
+          total: statsFromData.total || 0,
         });
       } catch (err) {
         // In development, the API might not be available
@@ -217,4 +224,4 @@ const ActivityScreen: React.FC<ActivityScreenProps> = ({ userId }) => {
   );
 };
 
-export default ActivityScreen;
+export default memo(ActivityScreen);

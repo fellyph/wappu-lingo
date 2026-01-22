@@ -75,11 +75,11 @@ export async function fetchUserTranslations(
 }
 
 /**
- * Get translation statistics for a user
+ * Compute statistics from an array of translations (no network request)
  */
-export async function fetchUserStats(userId: string): Promise<UserStats> {
-  const { translations } = await fetchUserTranslations(userId, { limit: 1000 });
-
+export function computeStatsFromTranslations(
+  translations: TranslationRecord[]
+): UserStats {
   const stats: UserStats = {
     total: translations.length,
     byProject: {},
@@ -88,7 +88,7 @@ export async function fetchUserStats(userId: string): Promise<UserStats> {
     byDate: {},
   };
 
-  for (const t of translations as TranslationRecord[]) {
+  for (const t of translations) {
     // By project
     stats.byProject[t.project_slug] = (stats.byProject[t.project_slug] || 0) + 1;
 
@@ -104,4 +104,12 @@ export async function fetchUserStats(userId: string): Promise<UserStats> {
   }
 
   return stats;
+}
+
+/**
+ * Get translation statistics for a user
+ */
+export async function fetchUserStats(userId: string): Promise<UserStats> {
+  const { translations } = await fetchUserTranslations(userId, { limit: 1000 });
+  return computeStatsFromTranslations(translations);
 }
