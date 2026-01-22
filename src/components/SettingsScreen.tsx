@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, Package, Hash, Languages } from 'lucide-react';
 import type { UseSettingsReturn } from '../types';
@@ -131,4 +132,4 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({
   );
 };
 
-export default SettingsScreen;
+export default memo(SettingsScreen);

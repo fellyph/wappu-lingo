@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { ShieldCheck, Check } from 'lucide-react';
 import type { GravatarProfile, Project } from '../types';
@@ -101,4 +102,4 @@ const Dashboard: React.FC<DashboardProps> = ({
   );
 };
 
-export default Dashboard;
+export default memo(Dashboard);

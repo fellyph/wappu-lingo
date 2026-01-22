@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 import type { SessionStats } from '../types';
@@ -47,4 +48,4 @@ const SummaryScreen: React.FC<SummaryScreenProps> = ({ onDone, sessionStats }) =
   );
 };
 
-export default SummaryScreen;
+export default memo(SummaryScreen);

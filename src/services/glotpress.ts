@@ -16,15 +16,33 @@ function buildUrl(path: string): string {
 }
 
 /**
- * Fisher-Yates shuffle for random sampling
+ * Reservoir sampling - select k random items from array in O(n) time, O(k) space
+ * More memory efficient than shuffling entire array when k << n
+ * Algorithm R: https://en.wikipedia.org/wiki/Reservoir_sampling
  */
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+function reservoirSample<T>(array: T[], k: number): T[] {
+  const n = array.length;
+
+  // If we want more items than available, return all
+  if (k >= n) {
+    return [...array];
   }
-  return shuffled;
+
+  // Fill reservoir with first k items
+  const reservoir: T[] = array.slice(0, k);
+
+  // Process remaining items
+  for (let i = k; i < n; i++) {
+    // Pick random index from 0 to i (inclusive)
+    const j = Math.floor(Math.random() * (i + 1));
+
+    // If j falls within reservoir range, replace that item
+    if (j < k) {
+      reservoir[j] = array[i];
+    }
+  }
+
+  return reservoir;
 }
 
 /**
@@ -79,6 +97,7 @@ export async function fetchUntranslatedStrings(
 
 /**
  * Fetch and randomly sample N strings for a translation session
+ * Uses reservoir sampling for O(k) memory usage instead of O(n) shuffle
  */
 export async function fetchSessionStrings(
   projectSlug: string,
@@ -91,9 +110,8 @@ export async function fetchSessionStrings(
     return [];
   }
 
-  // Random sample: shuffle and take first N
-  const shuffled = shuffleArray(stringsArray);
-  return shuffled.slice(0, Math.min(sampleSize, shuffled.length));
+  // Use reservoir sampling for memory-efficient random selection
+  return reservoirSample(stringsArray, sampleSize);
 }
 
 /**
